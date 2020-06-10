@@ -30,7 +30,10 @@ build/
 
 ### VS Code ###
 .vscode/
-.mvn/*
+
 
 ### Config file(s) ###
 src/main/resources/application.properties
+src/test/*
+.mvn/*
+
