@@ -4,6 +4,7 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+
 ### STS ###
 .apt_generated
 .classpath
@@ -29,6 +30,7 @@ build/
 
 ### VS Code ###
 .vscode/
+.mvn/*
 
 ### Config file(s) ###
 src/main/resources/application.properties
