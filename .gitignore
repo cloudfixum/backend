@@ -33,7 +33,6 @@ build/
 
 
 ### Config file(s) ###
-src/main/resources/application.properties
 src/test/*
 .mvn/*
 
