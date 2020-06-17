@@ -35,5 +35,6 @@ build/
 ### Config file(s) ###
 src/main/resources/application.properties
 src/test/*
+src/main/java/com/um/cloudfixum/config/DatabaseConfig.java
 .mvn/*
 
