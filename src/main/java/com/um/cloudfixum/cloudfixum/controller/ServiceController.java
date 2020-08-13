@@ -2,11 +2,19 @@ package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.common.ServService;
 import com.um.cloudfixum.cloudfixum.model.JobService;
+<<<<<<< HEAD
+=======
+import com.um.cloudfixum.cloudfixum.repository.ServiceRepository;
+>>>>>>> testing
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+<<<<<<< HEAD
 import java.util.List;
+=======
+import javax.validation.Valid;
+>>>>>>> testing
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -26,13 +34,13 @@ public class ServiceController {
     }
 
     @GetMapping("/{id}")
-    public void getServiceByID(@PathVariable Long id){
-        long lista = 3;
+    public ResponseEntity<JobService> getServiceByID(@PathVariable Long id){
+        return servService.getById(id);
     }
 
     @PostMapping
-    public void addService(){
-        String service = "Service";
+    public ResponseEntity<JobService> addService(@Valid @RequestBody JobService service){
+        return servService.create(service);
     }
 
     @PutMapping
