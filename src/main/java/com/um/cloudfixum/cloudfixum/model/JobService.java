@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 
 @Entity
-public class Service implements Serializable, Identificable {
+public class JobService implements Serializable, Identificable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotEmpty
