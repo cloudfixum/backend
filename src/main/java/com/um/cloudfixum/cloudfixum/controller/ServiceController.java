@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -26,12 +25,7 @@ public class ServiceController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<JobService>> getAllService(){
-        List<JobService> jobServices = servService.getAll()
-                .getBody()
-                .stream()
-                .filter(service -> service.getDate().isAfter(LocalDate.now().minusDays(1)))
-                .sorted(Comparator.comparing(JobService::getDate)).collect(Collectors.toList());
-        return new ResponseEntity<>(jobServices, HttpStatus.OK);
+        return servService.getAll();
     }
 
     @GetMapping("/{id}")
@@ -41,15 +35,16 @@ public class ServiceController {
 
     @PostMapping
     public ResponseEntity<JobService> addService(@Valid @RequestBody JobService service){
+        service.setDate(LocalDate.now());
         return servService.create(service);
     }
 
     @PutMapping
-    public ResponseEntity<JobService> updateService(JobService jobService){
+    public ResponseEntity<JobService> updateService(@Valid @RequestBody JobService jobService){
         return servService.update(jobService);
     }
 
-    @PutMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id){
         return servService.delete(id);
     }

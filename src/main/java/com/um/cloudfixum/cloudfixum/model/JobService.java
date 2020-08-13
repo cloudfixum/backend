@@ -9,10 +9,7 @@ import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
@@ -24,19 +21,17 @@ import javax.validation.constraints.Size;
 public class JobService implements Serializable, Identificable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotEmpty
     private Long id;
     @NotEmpty
     @Size(min = 5, max = 50)
     private String title;
     @NotEmpty
     private String category;
-    @NotEmpty
+    @NotNull
     private Long base_price;
     @NotEmpty
-    @Max(256)
+    @Size(max = 256)
     private String description;
-    @NotEmpty
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 }
