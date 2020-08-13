@@ -1,19 +1,28 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
+import com.um.cloudfixum.cloudfixum.common.ServService;
+import com.um.cloudfixum.cloudfixum.model.JobService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/service")
 public class ServiceController {
 
-    private final long var = 8 ;
+    private final ServService servService;
+
+    public ServiceController(ServService servService) {
+        this.servService = servService;
+    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public void getAllClients(){
-        long lista = 3;
+    public ResponseEntity<List<JobService>> getAllService(){
+        return servService.getAll();
     }
 
     @GetMapping("/{id}")
@@ -27,13 +36,13 @@ public class ServiceController {
     }
 
     @PutMapping
-    public void updateService(){
-        String service = "Service 2";
+    public ResponseEntity<JobService> updateService(JobService jobService){
+        return servService.update(jobService);
     }
 
     @PutMapping("/{id}")
-    public void deleteService(@PathVariable Long id){
-        long lista = 2;
+    public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id){
+        return servService.delete(id);
     }
 
 

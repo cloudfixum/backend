@@ -15,7 +15,6 @@ public class ServService extends GenericServiceImpl<JobService>{
         this.serviceRepository = serviceRepository;
     }
 
-
     @Override
     public JpaRepository<JobService, Long> getRepository() {
         return serviceRepository;
