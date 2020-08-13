@@ -1,20 +1,16 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
-import com.um.cloudfixum.cloudfixum.common.ServService;
+import com.um.cloudfixum.cloudfixum.service.ServService;
 import com.um.cloudfixum.cloudfixum.model.JobService;
-<<<<<<< HEAD
-=======
-import com.um.cloudfixum.cloudfixum.repository.ServiceRepository;
->>>>>>> testing
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-<<<<<<< HEAD
-import java.util.List;
-=======
 import javax.validation.Valid;
->>>>>>> testing
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -30,7 +26,12 @@ public class ServiceController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<JobService>> getAllService(){
-        return servService.getAll();
+        List<JobService> jobServices = servService.getAll()
+                .getBody()
+                .stream()
+                .filter(service -> service.getDate().isAfter(LocalDate.now().minusDays(1)))
+                .sorted(Comparator.comparing(JobService::getDate)).collect(Collectors.toList());
+        return new ResponseEntity<>(jobServices, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
