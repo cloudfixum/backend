@@ -24,7 +24,9 @@ public enum Category {
     COBBLER("Cobbler", ""),
     DRESSMAKER("Dressmaker", ""),
     AIRCON_TECH("Air Conditioning Technician", ""),
-    PAINTER("Painter", "");
+    PAINTER("Painter", ""),
+    LOCKSMITH("Locksmith",""),
+    OTHER("Other","");
 
     private String name;
     private String image_url;
