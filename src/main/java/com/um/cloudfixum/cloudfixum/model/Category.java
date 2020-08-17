@@ -1,6 +1,7 @@
 package com.um.cloudfixum.cloudfixum.model;
 import lombok.Getter;
 import lombok.ToString;
+
 @Getter
 @ToString
 public enum Category {

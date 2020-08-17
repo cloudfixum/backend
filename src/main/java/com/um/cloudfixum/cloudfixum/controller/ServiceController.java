@@ -36,11 +36,15 @@ public class ServiceController {
     @PostMapping
     public ResponseEntity<JobService> addService(@Valid @RequestBody JobService service){
         service.setDate(LocalDate.now());
+        service.setImage_url(service.getCategory().getImage_url());
+
         return servService.create(service);
     }
 
     @PutMapping
     public ResponseEntity<JobService> updateService(@Valid @RequestBody JobService jobService){
+        jobService.setImage_url(jobService.getCategory().getImage_url());
+
         return servService.update(jobService);
     }
 
