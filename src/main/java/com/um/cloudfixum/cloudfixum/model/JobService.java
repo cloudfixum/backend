@@ -20,24 +20,23 @@ public class JobService implements Serializable, Identificable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Title must be between 5 and 50 characters long.")
-    @Size(min = 5, max = 50)
+    @NotEmpty(message = "You must provide a title")
+    @Size(min = 5, max = 50, message = "Title must be between 5 and 50 characters long")
     private String title;
 
-    @NotNull(message = "Category can't be null.")
+    @NotNull(message = "Category can't be null")
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @NotNull(message = "Price can't be null.")
+    @NotNull(message = "Price can't be null")
     private Long base_price;
 
-    @NotEmpty(message = "You must provide a description.")
-    @Size(max = 256, message = "Description can't exceed 256 characters long.")
+    @NotEmpty(message = "You must provide a description")
+    @Size(max = 256, message = "Description can't exceed 256 characters long")
     private String description;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-
 
     private String image_url;
 }
