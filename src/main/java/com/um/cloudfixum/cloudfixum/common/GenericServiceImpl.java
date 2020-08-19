@@ -1,5 +1,7 @@
 package com.um.cloudfixum.cloudfixum.common;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +55,11 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
         if (!getRepository().findById(id).isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         getRepository().deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public Page<T> findServiceByPage(int page){
+        return getRepository().findAll(PageRequest.of(page,2));
     }
 
     public abstract JpaRepository<T, Long> getRepository();

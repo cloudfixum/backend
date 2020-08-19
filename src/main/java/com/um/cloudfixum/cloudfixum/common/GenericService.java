@@ -1,5 +1,6 @@
 package com.um.cloudfixum.cloudfixum.common;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -18,5 +19,5 @@ public interface GenericService<T extends Serializable> {
 
     ResponseEntity<HttpStatus> delete(Long id);
 
-
+    Page<T> findServiceByPage(int page);
 }

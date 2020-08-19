@@ -2,6 +2,7 @@ package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.service.JobServiceService;
 import com.um.cloudfixum.cloudfixum.model.JobService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,11 @@ public class ServiceController {
     public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id){
         return jobServiceService.delete(id);
     }
-
+    @GetMapping("/paged/{page}")
+    public Page<JobService> getByPage(@PathVariable("page") int page){
+        System.out.println(jobServiceService.getAll().getBody());
+        return jobServiceService.findServiceByPage(page);
+    }
 
 
 }
