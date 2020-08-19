@@ -16,6 +16,14 @@ The API will be upstream in this link
 
 [https://cloudfixum-api-dev.herokuapp.com/](https://cloudfixum-api-dev.herokuapp.com/)
 
+# Production
+The API will be upstream in this link
+
+[www.cloudfixum.software](http://www.cloudfixum.software)
+
+# API Docs.
+You can read the API Docs [HERE](https://cloudfixum-api-dev.herokuapp.com/swagger-ui.html)
+
 
 
 
