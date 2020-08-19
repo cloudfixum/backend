@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ServService extends GenericServiceImpl<JobService> {
+public class JobServiceService extends GenericServiceImpl<JobService> {
     @Autowired
     private final ServiceRepository serviceRepository;
 
-    public ServService(ServiceRepository serviceRepository) {
+    public JobServiceService(ServiceRepository serviceRepository) {
         this.serviceRepository = serviceRepository;
     }
 
