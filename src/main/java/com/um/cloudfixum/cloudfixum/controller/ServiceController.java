@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
@@ -54,9 +55,9 @@ public class ServiceController {
         return jobServiceService.delete(id);
     }
     @GetMapping("/paged/{page}")
-    public ResponseEntity<List<JobService>> getByPage(@PathVariable("page") int page){
-        System.out.println(jobServiceService.getAll().getBody());
-        return jobServiceService.findServiceByPage(page);
+    public ResponseEntity<List<JobService>> getByPage(@PathVariable("page") int page, HttpServletRequest request){
+
+        return jobServiceService.findServiceByPage(page,request);
     }
 
 

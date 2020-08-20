@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface GenericService<T extends Serializable> {
 
     ResponseEntity<HttpStatus> delete(Long id);
 
-    ResponseEntity<List<T>> findServiceByPage(int page);
+    ResponseEntity<List<T>> findServiceByPage(int page, HttpServletRequest request);
 }
