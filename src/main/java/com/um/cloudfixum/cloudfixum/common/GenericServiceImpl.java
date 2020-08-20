@@ -60,26 +60,24 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
     }
 
     @Override
-    public ResponseEntity<List<T>> findServiceByPage(int page){
+    public ResponseEntity<List<T>> findServiceByPage(int page) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        //if (page>0){
-            int previus = page-1;
-            int next = page + 1;
-            if (page>0 && getRepository().findAll(PageRequest.of(page,2)).getTotalPages()>page){
-                responseHeaders.add("prev","http://localhost:8080/api/service/paged/"+previus);
-                responseHeaders.add("next","http://localhost:8080/api/service/paged/"+next);
-            }else if(page == 0 && getRepository().findAll(PageRequest.of(page,2)).getTotalPages()>page){
-                previus = 0;
-                responseHeaders.add("prev","http://localhost:8080/api/service/paged/"+previus);
-                responseHeaders.add("next","http://localhost:8080/api/service/paged/"+next);
-            }else{
-                next = page;
-                responseHeaders.add("prev","http://localhost:8080/api/service/paged/"+previus);
-                responseHeaders.add("next","http://localhost:8080/api/service/paged/"+next);
-            }
+        int previus = page - 1;
+        int next = page + 1;
+        if (page > 0 && (getRepository().findAll(PageRequest.of(page, 2)).getTotalPages() - 1) > page) {
+            responseHeaders.add("prev", "http://localhost:8080/api/service/paged/" + previus);
+            responseHeaders.add("next", "http://localhost:8080/api/service/paged/" + next);
+        } else if (page == 0 && (getRepository().findAll(PageRequest.of(page, 2)).getTotalPages() - 1) > page) {
+            previus = 0;
+            responseHeaders.add("prev", "http://localhost:8080/api/service/paged/" + previus);
+            responseHeaders.add("next", "http://localhost:8080/api/service/paged/" + next);
+        } else {
+            next = page;
+            responseHeaders.add("prev", "http://localhost:8080/api/service/paged/" + previus);
+            responseHeaders.add("next", "http://localhost:8080/api/service/paged/" + next);
+        }
 
-            ResponseEntity<List<T>> responseEntity = new ResponseEntity<>(getRepository().findAll(PageRequest.of(page,2)).get().collect(Collectors.toList()),responseHeaders, HttpStatus.OK);
-        //}
+        ResponseEntity<List<T>> responseEntity = new ResponseEntity<>(getRepository().findAll(PageRequest.of(page, 2)).get().collect(Collectors.toList()), responseHeaders, HttpStatus.OK);
         return responseEntity;
     }
 
