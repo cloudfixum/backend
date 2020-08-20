@@ -19,5 +19,5 @@ public interface GenericService<T extends Serializable> {
 
     ResponseEntity<HttpStatus> delete(Long id);
 
-    Page<T> findServiceByPage(int page);
+    ResponseEntity<List<T>> findServiceByPage(int page);
 }

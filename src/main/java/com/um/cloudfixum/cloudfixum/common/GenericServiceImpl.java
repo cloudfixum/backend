@@ -3,8 +3,10 @@ package com.um.cloudfixum.cloudfixum.common;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -58,8 +60,27 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
     }
 
     @Override
-    public Page<T> findServiceByPage(int page){
-        return getRepository().findAll(PageRequest.of(page,2));
+    public ResponseEntity<List<T>> findServiceByPage(int page){
+        HttpHeaders responseHeaders = new HttpHeaders();
+        //if (page>0){
+            int previus = page-1;
+            int next = page + 1;
+            if (page>0 && getRepository().findAll(PageRequest.of(page,2)).getTotalPages()>page){
+                responseHeaders.add("prev","http://localhost:8080/api/service/paged/"+previus);
+                responseHeaders.add("next","http://localhost:8080/api/service/paged/"+next);
+            }else if(page == 0 && getRepository().findAll(PageRequest.of(page,2)).getTotalPages()>page){
+                previus = 0;
+                responseHeaders.add("prev","http://localhost:8080/api/service/paged/"+previus);
+                responseHeaders.add("next","http://localhost:8080/api/service/paged/"+next);
+            }else{
+                next = page;
+                responseHeaders.add("prev","http://localhost:8080/api/service/paged/"+previus);
+                responseHeaders.add("next","http://localhost:8080/api/service/paged/"+next);
+            }
+
+            ResponseEntity<List<T>> responseEntity = new ResponseEntity<>(getRepository().findAll(PageRequest.of(page,2)).get().collect(Collectors.toList()),responseHeaders, HttpStatus.OK);
+        //}
+        return responseEntity;
     }
 
     public abstract JpaRepository<T, Long> getRepository();

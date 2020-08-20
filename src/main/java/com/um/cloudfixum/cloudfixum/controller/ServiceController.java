@@ -54,7 +54,7 @@ public class ServiceController {
         return jobServiceService.delete(id);
     }
     @GetMapping("/paged/{page}")
-    public Page<JobService> getByPage(@PathVariable("page") int page){
+    public ResponseEntity<List<JobService>> getByPage(@PathVariable("page") int page){
         System.out.println(jobServiceService.getAll().getBody());
         return jobServiceService.findServiceByPage(page);
     }
