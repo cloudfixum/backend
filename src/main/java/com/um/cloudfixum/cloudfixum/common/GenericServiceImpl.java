@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +62,7 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
     }
 
     @Override
-    public ResponseEntity<List<T>> findServiceByPage(int page,HttpServletRequest request) {
+    public ResponseEntity<List<T>> findServiceByPage(int page, HttpServletRequest request) {
         HttpHeaders responseHeaders = new HttpHeaders();
         int previus = page - 1;
         int next = page + 1;
@@ -77,13 +78,21 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
             responseHeaders.add("prev", getPathURL(request) + previus);
             responseHeaders.add("next", getPathURL(request) + next);
         }
-        responseHeaders.add("numberOfElements", String.valueOf(getRepository().findAll(PageRequest.of(page,2)).getTotalElements()));
-        responseHeaders.add("numberOfPages",String.valueOf(getRepository().findAll(PageRequest.of(page,2)).getTotalPages()));
+        responseHeaders.add("numberOfElements", String.valueOf(getRepository().findAll(PageRequest.of(page, 2)).getTotalElements()));
+        responseHeaders.add("numberOfPages", String.valueOf(getRepository().findAll(PageRequest.of(page, 2)).getTotalPages()));
         return new ResponseEntity<>(getRepository().findAll(PageRequest.of(page, 2)).get().collect(Collectors.toList()), responseHeaders, HttpStatus.OK);
 
     }
-    private String getPathURL(HttpServletRequest request){
-        return String.valueOf(request.getRequestURL())+"?page=";
+
+    private String getPathURL(HttpServletRequest request) {
+        System.out.println(request.getQueryString());
+        if (!request.getQueryString().contains("size")) {
+            return String.valueOf(request.getRequestURL()) + "?page=";
+        }
+        String[] querys = request.getQueryString().split("&");
+        String sizequery = (querys[0].contains("size")) ? querys[0] : querys[1];
+        return String.valueOf(request.getRequestURL()) + "?" + sizequery + "&page=";
     }
+
     public abstract JpaRepository<T, Long> getRepository();
 }
