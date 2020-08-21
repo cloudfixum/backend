@@ -66,35 +66,24 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
         int previus = page - 1;
         int next = page + 1;
         if (page > 0 && (getRepository().findAll(PageRequest.of(page, 2)).getTotalPages() - 1) > page) {
-            responseHeaders.add("prev", getPathURL(request,6) + previus);
-            responseHeaders.add("next", getPathURL(request,6) + next);
+            responseHeaders.add("prev", getPathURL(request) + previus);
+            responseHeaders.add("next", getPathURL(request) + next);
         } else if (page == 0 && (getRepository().findAll(PageRequest.of(page, 2)).getTotalPages() - 1) > page) {
             previus = 0;
-            responseHeaders.add("prev", getPathURL(request,6) + previus);
-            responseHeaders.add("next", getPathURL(request,6) + next);
+            responseHeaders.add("prev", getPathURL(request) + previus);
+            responseHeaders.add("next", getPathURL(request) + next);
         } else {
             next = page;
-            responseHeaders.add("prev", getPathURL(request,6) + previus);
-            responseHeaders.add("next", getPathURL(request,6) + next);
+            responseHeaders.add("prev", getPathURL(request) + previus);
+            responseHeaders.add("next", getPathURL(request) + next);
         }
         responseHeaders.add("numberOfElements", String.valueOf(getRepository().findAll(PageRequest.of(page,2)).getTotalElements()));
-        ResponseEntity<List<T>> responseEntity = new ResponseEntity<>(getRepository().findAll(PageRequest.of(page, 2)).get().collect(Collectors.toList()), responseHeaders, HttpStatus.OK);
-        return responseEntity;
+        responseHeaders.add("numberOfPages",String.valueOf(getRepository().findAll(PageRequest.of(page,2)).getTotalPages()));
+        return new ResponseEntity<>(getRepository().findAll(PageRequest.of(page, 2)).get().collect(Collectors.toList()), responseHeaders, HttpStatus.OK);
+
     }
-    public String getPathURL(HttpServletRequest request,int bar_number){
-        String url = String.valueOf(request.getRequestURL());
-        String final_url = "";
-        int counter = 0;
-        for (int i = 0; i<url.length();i++){
-            final_url = final_url+""+String.valueOf(url.charAt(i));
-            if (url.charAt(i) == '/'){
-                counter += 1;
-            }
-            if (counter == bar_number){
-                break;
-            }
-        }
-        return final_url;
+    private String getPathURL(HttpServletRequest request){
+        return String.valueOf(request.getRequestURL())+"?page=";
     }
     public abstract JpaRepository<T, Long> getRepository();
 }

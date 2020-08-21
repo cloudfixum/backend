@@ -26,17 +26,18 @@ public class ServiceController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<JobService>> getAllService(){
-        return jobServiceService.getAll();
+    public ResponseEntity<List<JobService>> getAllService(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, HttpServletRequest request) {
+        size = (size == null) ? 9 : size;
+        return (page == null) ? jobServiceService.getAll() : jobServiceService.findServiceByPage(page, request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<JobService> getServiceByID(@PathVariable Long id){
+    public ResponseEntity<JobService> getServiceByID(@PathVariable Long id) {
         return jobServiceService.getById(id);
     }
 
     @PostMapping
-    public ResponseEntity<JobService> addService(@Valid @RequestBody JobService service){
+    public ResponseEntity<JobService> addService(@Valid @RequestBody JobService service) {
         service.setDate(LocalDate.now());
         service.setImage_url(service.getCategory().getImage_url());
 
@@ -44,21 +45,14 @@ public class ServiceController {
     }
 
     @PutMapping
-    public ResponseEntity<JobService> updateService(@Valid @RequestBody JobService jobService){
+    public ResponseEntity<JobService> updateService(@Valid @RequestBody JobService jobService) {
         jobService.setImage_url(jobService.getCategory().getImage_url());
 
         return jobServiceService.update(jobService);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id){
+    public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id) {
         return jobServiceService.delete(id);
     }
-    @GetMapping("/paged/{page}")
-    public ResponseEntity<List<JobService>> getByPage(@PathVariable("page") int page, HttpServletRequest request){
-
-        return jobServiceService.findServiceByPage(page,request);
-    }
-
-
 }
