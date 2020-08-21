@@ -27,8 +27,8 @@ public class ServiceController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<JobService>> getAllService(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, HttpServletRequest request) {
-        size = (size == null) ? 9 : size;
-        return (page == null) ? jobServiceService.getAll() : jobServiceService.findServiceByPage(page, request);
+        size = (size == null || size < 1) ? 9 : size;
+        return (page == null || page < 0) ? jobServiceService.getAll() : jobServiceService.findServiceByPage(page, size, request);
     }
 
     @GetMapping("/{id}")

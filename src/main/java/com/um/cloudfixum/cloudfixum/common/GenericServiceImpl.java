@@ -62,36 +62,27 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
     }
 
     @Override
-    public ResponseEntity<List<T>> findServiceByPage(int page, HttpServletRequest request) {
+    public ResponseEntity<List<T>> findServiceByPage(int page, int size, HttpServletRequest request) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        int previus = page - 1;
-        int next = page + 1;
-        if (page > 0 && (getRepository().findAll(PageRequest.of(page, 2)).getTotalPages() - 1) > page) {
-            responseHeaders.add("prev", getPathURL(request) + previus);
-            responseHeaders.add("next", getPathURL(request) + next);
-        } else if (page == 0 && (getRepository().findAll(PageRequest.of(page, 2)).getTotalPages() - 1) > page) {
-            previus = 0;
-            responseHeaders.add("prev", getPathURL(request) + previus);
-            responseHeaders.add("next", getPathURL(request) + next);
-        } else {
-            next = page;
-            responseHeaders.add("prev", getPathURL(request) + previus);
-            responseHeaders.add("next", getPathURL(request) + next);
-        }
-        responseHeaders.add("numberOfElements", String.valueOf(getRepository().findAll(PageRequest.of(page, 2)).getTotalElements()));
-        responseHeaders.add("numberOfPages", String.valueOf(getRepository().findAll(PageRequest.of(page, 2)).getTotalPages()));
-        return new ResponseEntity<>(getRepository().findAll(PageRequest.of(page, 2)).get().collect(Collectors.toList()), responseHeaders, HttpStatus.OK);
+
+        boolean first = page == 0;
+        boolean last = (page + 1) == getRepository().findAll(PageRequest.of(page, size)).getTotalPages();
+
+        int previous = first ? 0 : page - 1;
+        int next = last? page : page + 1;
+
+        responseHeaders.add("prev", getPathURL(request, size) + previous);
+        responseHeaders.add("next", getPathURL(request, size) + next);
+        responseHeaders.add("numberOfElements", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalElements()));
+        responseHeaders.add("totalPages", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalPages()));
+
+        return new ResponseEntity<>(getRepository().findAll(PageRequest.of(page, size)).get().collect(Collectors.toList()), responseHeaders, HttpStatus.OK);
 
     }
 
-    private String getPathURL(HttpServletRequest request) {
-        System.out.println(request.getQueryString());
-        if (!request.getQueryString().contains("size")) {
-            return String.valueOf(request.getRequestURL()) + "?page=";
-        }
-        String[] querys = request.getQueryString().split("&");
-        String sizequery = (querys[0].contains("size")) ? querys[0] : querys[1];
-        return String.valueOf(request.getRequestURL()) + "?" + sizequery + "&page=";
+    private String getPathURL(HttpServletRequest request, int size) {
+        return request.getRequestURL() + "?size=" + size + "&page=";
+
     }
 
     public abstract JpaRepository<T, Long> getRepository();
