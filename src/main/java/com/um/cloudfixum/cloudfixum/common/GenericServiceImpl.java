@@ -71,10 +71,13 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
         int previous = first ? 0 : page - 1;
         int next = last? page : page + 1;
 
+        responseHeaders.add("currentPage", String.valueOf(page));
+        responseHeaders.add("size", String.valueOf(size));
+        responseHeaders.add("totalRecords", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalElements()));
+        responseHeaders.add("totalPages", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalPages()));
         responseHeaders.add("prev",  request.getRequestURL() + "?page=" + previous + "&size=" + size);
         responseHeaders.add("next",  request.getRequestURL() + "?page=" + next + "&size=" + size);
-        responseHeaders.add("numberOfElements", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalElements()));
-        responseHeaders.add("totalPages", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalPages()));
+
 
         return new ResponseEntity<>(getRepository().findAll(PageRequest.of(page, size)).get().collect(Collectors.toList()), responseHeaders, HttpStatus.OK);
 
