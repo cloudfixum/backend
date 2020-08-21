@@ -62,7 +62,7 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
     }
 
     @Override
-    public ResponseEntity<List<T>> findServiceByPage(int page, int size, HttpServletRequest request) {
+    public ResponseEntity<List<T>> findByPage(int page, int size, HttpServletRequest request) {
         HttpHeaders responseHeaders = new HttpHeaders();
 
         boolean first = page == 0;
@@ -71,17 +71,12 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
         int previous = first ? 0 : page - 1;
         int next = last? page : page + 1;
 
-        responseHeaders.add("prev", getPathURL(request, size) + previous);
-        responseHeaders.add("next", getPathURL(request, size) + next);
+        responseHeaders.add("prev",  request.getRequestURL() + "?page=" + previous + "&size=" + size);
+        responseHeaders.add("next",  request.getRequestURL() + "?page=" + next + "&size=" + size);
         responseHeaders.add("numberOfElements", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalElements()));
         responseHeaders.add("totalPages", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalPages()));
 
         return new ResponseEntity<>(getRepository().findAll(PageRequest.of(page, size)).get().collect(Collectors.toList()), responseHeaders, HttpStatus.OK);
-
-    }
-
-    private String getPathURL(HttpServletRequest request, int size) {
-        return request.getRequestURL() + "?size=" + size + "&page=";
 
     }
 

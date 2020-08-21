@@ -2,7 +2,6 @@ package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.service.JobServiceService;
 import com.um.cloudfixum.cloudfixum.model.JobService;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +27,7 @@ public class ServiceController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<JobService>> getAllService(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, HttpServletRequest request) {
         size = (size == null || size < 1) ? 9 : size;
-        return (page == null || page < 0) ? jobServiceService.getAll() : jobServiceService.findServiceByPage(page, size, request);
+        return (page == null || page < 0) ? jobServiceService.getAll() : jobServiceService.findByPage(page, size, request);
     }
 
     @GetMapping("/{id}")
