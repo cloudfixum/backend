@@ -2,6 +2,7 @@ package com.um.cloudfixum.cloudfixum.common;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -78,8 +79,9 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
         responseHeaders.add("prev",  linkPrevious);
         responseHeaders.add("next",  linkNext);
 
+        List<T> responseBody = getRepository().findAll(PageRequest.of(page, size, Sort.by("id").descending())).get().collect(Collectors.toList());
 
-        return new ResponseEntity<>(getRepository().findAll(PageRequest.of(page, size)).get().collect(Collectors.toList()), responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(responseBody, responseHeaders, HttpStatus.OK);
 
     }
 
