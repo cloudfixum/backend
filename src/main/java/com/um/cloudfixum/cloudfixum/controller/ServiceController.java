@@ -6,13 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000", "https://cloudfixum-develop.herokuapp.com"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://cloudfixum-develop.herokuapp.com", "https://cloudfixum.herokuapp.com"})
 @RequestMapping("/api/service")
 public class ServiceController {
 
@@ -24,17 +25,18 @@ public class ServiceController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<JobService>> getAllService(){
-        return jobServiceService.getAll();
+    public ResponseEntity<List<JobService>> getAllService(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, HttpServletRequest request) {
+        size = (size == null || size < 1) ? 9 : size;
+        return (page == null || page < 0) ? jobServiceService.getAll() : jobServiceService.findByPage(page, size, request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<JobService> getServiceByID(@PathVariable Long id){
+    public ResponseEntity<JobService> getServiceByID(@PathVariable Long id) {
         return jobServiceService.getById(id);
     }
 
     @PostMapping
-    public ResponseEntity<JobService> addService(@Valid @RequestBody JobService service){
+    public ResponseEntity<JobService> addService(@Valid @RequestBody JobService service) {
         service.setDate(LocalDate.now());
         service.setImage_url(service.getCategory().getImage_url());
 
@@ -42,17 +44,14 @@ public class ServiceController {
     }
 
     @PutMapping
-    public ResponseEntity<JobService> updateService(@Valid @RequestBody JobService jobService){
+    public ResponseEntity<JobService> updateService(@Valid @RequestBody JobService jobService) {
         jobService.setImage_url(jobService.getCategory().getImage_url());
 
         return jobServiceService.update(jobService);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id){
+    public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id) {
         return jobServiceService.delete(id);
     }
-
-
-
 }
