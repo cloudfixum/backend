@@ -68,15 +68,15 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
         boolean first = page == 0;
         boolean last = (page + 1) == getRepository().findAll(PageRequest.of(page, size)).getTotalPages();
 
-        int previous = first ? 0 : page - 1;
-        int next = last? page : page + 1;
+        String linkPrevious = first ? "null" : request.getRequestURL() + "?page=" + (page - 1) + "&size=" + size;
+        String linkNext = last ? "null" : request.getRequestURL() + "?page=" + (page + 1) + "&size=" + size;
 
         responseHeaders.add("currentPage", String.valueOf(page));
         responseHeaders.add("size", String.valueOf(size));
         responseHeaders.add("totalRecords", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalElements()));
         responseHeaders.add("totalPages", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalPages()));
-        responseHeaders.add("prev",  request.getRequestURL() + "?page=" + previous + "&size=" + size);
-        responseHeaders.add("next",  request.getRequestURL() + "?page=" + next + "&size=" + size);
+        responseHeaders.add("prev",  linkPrevious);
+        responseHeaders.add("next",  linkNext);
 
 
         return new ResponseEntity<>(getRepository().findAll(PageRequest.of(page, size)).get().collect(Collectors.toList()), responseHeaders, HttpStatus.OK);
