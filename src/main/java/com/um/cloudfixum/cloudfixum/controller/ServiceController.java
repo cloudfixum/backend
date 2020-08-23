@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000", "https://cloudfixum-develop.herokuapp.com", "https://cloudfixum.herokuapp.com"})
+@CrossOrigin
 @RequestMapping("/api/service")
 public class ServiceController {
 

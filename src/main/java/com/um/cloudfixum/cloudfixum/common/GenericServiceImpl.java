@@ -72,12 +72,12 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
         String linkPrevious = first ? "null" : request.getRequestURL() + "?page=" + (page - 1) + "&size=" + size;
         String linkNext = last ? "null" : request.getRequestURL() + "?page=" + (page + 1) + "&size=" + size;
 
-        responseHeaders.add("currentPage", String.valueOf(page));
-        responseHeaders.add("size", String.valueOf(size));
-        responseHeaders.add("totalRecords", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalElements()));
-        responseHeaders.add("totalPages", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalPages()));
-        responseHeaders.add("prev",  linkPrevious);
-        responseHeaders.add("next",  linkNext);
+        responseHeaders.add("CurrentPage", String.valueOf(page));
+        responseHeaders.add("Size", String.valueOf(size));
+        responseHeaders.add("TotalRecords", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalElements()));
+        responseHeaders.add("TotalPages", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalPages()));
+        responseHeaders.add("Prev",  linkPrevious);
+        responseHeaders.add("Next",  linkNext);
 
         List<T> responseBody = getRepository().findAll(PageRequest.of(page, size, Sort.by("id").descending())).get().collect(Collectors.toList());
 
