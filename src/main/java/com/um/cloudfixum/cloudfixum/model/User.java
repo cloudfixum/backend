@@ -34,4 +34,5 @@ public class User implements Serializable, Identificable {
 
     @NotEmpty(message = "Email needed")
     private String email;
+
 }

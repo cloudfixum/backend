@@ -11,19 +11,32 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class CustomUserService extends GenericServiceImpl<User> implements UserDetailsService{
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public CustomUserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        return null;
+        User usuario = new User();
+        usuario.setId((long) 1);
+        usuario.setEmail("saldasldl");
+        usuario.setPassword("hashedpass");
+        usuario.setUsername("Elzeta");
+
+        return new User();
     }
 
     @Override
     public JpaRepository<User, Long> getRepository() {
         return null;
     }
+
 }
