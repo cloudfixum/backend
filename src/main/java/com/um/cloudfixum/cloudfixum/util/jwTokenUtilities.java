@@ -1,6 +1,5 @@
 package com.um.cloudfixum.cloudfixum.util;
 
-import com.um.cloudfixum.cloudfixum.service.CustomUserService;
 import io.jsonwebtoken.Claims;
 
 import io.jsonwebtoken.Jwts;
