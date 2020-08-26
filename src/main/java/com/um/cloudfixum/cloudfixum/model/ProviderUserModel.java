@@ -39,11 +39,11 @@ public class ProviderUserModel implements Serializable, Identificable {
 
     @NotEmpty(message = "Phone number needed")
     @Size(min = 10, max = 15, message = "Format: +5492604303030")
-    private String prone_number;
+    private String phone_number;
 
     @NotEmpty(message = "Address needed")
     @Size(min = 15, max = 25, message = "Location requires between 15 and 25 characters long")
-    private String Address;
+    private String address;
 
     @OneToMany(mappedBy = "Service Provider")
     private List<JobService> serviceList;
