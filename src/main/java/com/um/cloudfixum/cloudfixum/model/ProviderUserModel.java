@@ -6,6 +6,7 @@ import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -35,6 +36,7 @@ public class ProviderUserModel implements Serializable, Identificable {
     private String surname;
 
     @NotEmpty(message = "Email needed")
+    @Email
     private String email;
 
     @NotEmpty(message = "Phone number needed")
