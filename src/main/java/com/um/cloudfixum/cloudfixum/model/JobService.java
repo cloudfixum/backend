@@ -39,4 +39,7 @@ public class JobService implements Serializable, Identificable {
     private LocalDate date;
 
     private String image_url;
+
+    @ManyToOne
+    private ProviderUserModel serviceProvider;
 }
