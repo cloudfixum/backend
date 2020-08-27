@@ -17,24 +17,28 @@ public class ProviderUserController {
     public ProviderUserController(ProviderUserService providerUserService) {
         this.providerUserService = providerUserService;
     }
+
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProviderUserModel> addUser(@Valid @RequestBody ProviderUserModel providerUserModel){
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<ProviderUserModel> addUser(@Valid @RequestBody ProviderUserModel providerUserModel) {
         return providerUserService.create(providerUserModel);
     }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProviderUserModel> getUser(@PathVariable Long id){
+    public ResponseEntity<ProviderUserModel> getUserByID(@PathVariable Long id) {
         return providerUserService.getById(id);
     }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id){
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
         return providerUserService.delete(id);
     }
+
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProviderUserModel> updateUser(@Valid @RequestBody ProviderUserModel providerUserModel){
+    public ResponseEntity<ProviderUserModel> updateUser(@Valid @RequestBody ProviderUserModel providerUserModel) {
         return providerUserService.update(providerUserModel);
     }
 
