@@ -1,6 +1,7 @@
 package com.um.cloudfixum.cloudfixum.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
 
@@ -48,6 +49,7 @@ public class ProviderUserModel implements Serializable, Identificable {
     private String address;
 
     @OneToMany(mappedBy = "serviceProvider")
+    @JsonIgnore
     private List<JobService> serviceList;
 
 }
