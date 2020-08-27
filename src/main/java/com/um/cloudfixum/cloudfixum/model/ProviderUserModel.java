@@ -1,7 +1,6 @@
 package com.um.cloudfixum.cloudfixum.model;
 
 
-import com.sun.tools.javac.util.List;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
 
@@ -10,6 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -47,7 +47,7 @@ public class ProviderUserModel implements Serializable, Identificable {
     @Size(min = 15, max = 25, message = "Location requires between 15 and 25 characters long")
     private String address;
 
-    @OneToMany(mappedBy = "Service Provider")
+    @OneToMany(mappedBy = "serviceProvider")
     private List<JobService> serviceList;
 
 }
