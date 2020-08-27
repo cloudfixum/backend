@@ -1,6 +1,7 @@
 package com.um.cloudfixum.cloudfixum.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
 
@@ -28,7 +29,7 @@ public class ProviderUserModel implements Serializable, Identificable {
     private String dni;
 
     @NotEmpty(message = "Service provider name needed")
-    @Size(min = 5, max = 40, message = "Service provider name must be between 5 and 40 characters long")
+    @Size(min = 3, max = 40, message = "Service provider name must be between 3 and 40 characters long")
     private String name;
 
     @NotEmpty(message = "surname needed")
@@ -44,10 +45,11 @@ public class ProviderUserModel implements Serializable, Identificable {
     private String phone_number;
 
     @NotEmpty(message = "Address needed")
-    @Size(min = 15, max = 25, message = "Location requires between 15 and 25 characters long")
+    @Size(min = 12, max = 25, message = "Location requires between 12 and 25 characters long")
     private String address;
 
     @OneToMany(mappedBy = "serviceProvider")
+    @JsonIgnore
     private List<JobService> serviceList;
 
 }
