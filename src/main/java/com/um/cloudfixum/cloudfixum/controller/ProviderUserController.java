@@ -1,6 +1,6 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
-import com.um.cloudfixum.cloudfixum.model.ProviderUserModel;
+import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.service.ProviderUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +20,13 @@ public class ProviderUserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ProviderUserModel> addUser(@Valid @RequestBody ProviderUserModel providerUserModel) {
-        return providerUserService.create(providerUserModel);
+    public ResponseEntity<ProviderUser> addUser(@Valid @RequestBody ProviderUser providerUser) {
+        return providerUserService.create(providerUser);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProviderUserModel> getUserByID(@PathVariable Long id) {
+    public ResponseEntity<ProviderUser> getUserByID(@PathVariable Long id) {
         return providerUserService.getById(id);
     }
 
@@ -38,8 +38,8 @@ public class ProviderUserController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProviderUserModel> updateUser(@Valid @RequestBody ProviderUserModel providerUserModel) {
-        return providerUserService.update(providerUserModel);
+    public ResponseEntity<ProviderUser> updateUser(@Valid @RequestBody ProviderUser providerUser) {
+        return providerUserService.update(providerUser);
     }
 
 }

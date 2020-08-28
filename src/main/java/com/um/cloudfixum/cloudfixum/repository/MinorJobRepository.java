@@ -1,9 +1,9 @@
 package com.um.cloudfixum.cloudfixum.repository;
-import com.um.cloudfixum.cloudfixum.model.JobService;
+import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ServiceRepository extends JpaRepository <JobService, Long> {
+public interface MinorJobRepository extends JpaRepository <MinorJob, Long> {
     
 }

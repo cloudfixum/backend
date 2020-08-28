@@ -31,7 +31,7 @@ public class Constant {
     //SwaggerConfig
     public static final String API = "/api/**";
 
-    //Model JobService
+    //Model MinorJob
     public static final String TITLE_PROVIDE = "You must provide a title";
     public static final String TITLE_CHARACTERS = "Title must be between 5 and 50 characters long";
     public static final String MESSAGE_CATEGORY = "Category can't be null";

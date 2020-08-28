@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 
 @Entity
-public class ProviderUserModel implements Serializable, Identificable {
+public class ProviderUser implements Serializable, Identificable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +52,6 @@ public class ProviderUserModel implements Serializable, Identificable {
 
     @OneToMany(mappedBy = Constant.SERVICE_PROVIDER)
     @JsonIgnore
-    private List<JobService> serviceList;
+    private List<MinorJob> serviceList;
 
 }

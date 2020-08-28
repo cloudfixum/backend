@@ -17,7 +17,7 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 
 @Entity
-public class JobService implements Serializable, Identificable {
+public class MinorJob implements Serializable, Identificable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,5 +43,5 @@ public class JobService implements Serializable, Identificable {
     private String image_url;
 
     @ManyToOne
-    private ProviderUserModel serviceProvider;
+    private ProviderUser serviceProvider;
 }
