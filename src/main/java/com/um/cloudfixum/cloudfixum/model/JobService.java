@@ -2,6 +2,8 @@ package com.um.cloudfixum.cloudfixum.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+
+import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,22 +22,22 @@ public class JobService implements Serializable, Identificable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "You must provide a title")
-    @Size(min = 5, max = 50, message = "Title must be between 5 and 50 characters long")
+    @NotEmpty(message = Constant.TITLE_PROVIDE)
+    @Size(min = 5, max = 50, message = Constant.TITLE_CHARACTERS)
     private String title;
 
-    @NotNull(message = "Category can't be null")
+    @NotNull(message = Constant.MESSAGE_CATEGORY)
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @NotNull(message = "Price can't be null")
+    @NotNull(message = Constant.PRICE_NOT_NULL)
     private Long base_price;
 
-    @NotEmpty(message = "You must provide a description")
-    @Size(max = 256, message = "Description can't exceed 256 characters long")
+    @NotEmpty(message = Constant.PROVIDE_DESCRIPTION)
+    @Size(max = 256, message = Constant.DESCRIPTION_CHARACTERS_LONG)
     private String description;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = Constant.FORMAT_DATE)
     private LocalDate date;
 
     private String image_url;

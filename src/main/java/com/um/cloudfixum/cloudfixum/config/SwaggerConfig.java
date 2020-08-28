@@ -1,5 +1,6 @@
 package com.um.cloudfixum.cloudfixum.config;
 
+import com.um.cloudfixum.cloudfixum.common.Constant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,7 @@ public class SwaggerConfig {
 
         return new Docket(DocumentationType.SWAGGER_2).select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
-                .paths(PathSelectors.ant("/api/**"))
+                .paths(PathSelectors.ant(Constant.API))
                 .build();
     }
 }

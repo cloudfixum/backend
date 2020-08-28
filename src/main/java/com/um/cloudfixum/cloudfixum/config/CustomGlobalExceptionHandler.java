@@ -1,5 +1,6 @@
 package com.um.cloudfixum.cloudfixum.config;
 
+import com.um.cloudfixum.cloudfixum.common.Constant;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                                                                   HttpStatus status, WebRequest request) {
 
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", status.value());
-        body.put("error", status.toString());
+        body.put(Constant.TIMESTAMP, new Date());
+        body.put(Constant.STATUS, status.value());
+        body.put(Constant.ERROR, status.toString());
 
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
@@ -34,7 +35,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList());
 
-        body.put("message", errors);
+        body.put(Constant.MESSAGE, errors);
 
         return new ResponseEntity<>(body, headers, status);
 

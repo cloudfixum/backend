@@ -1,5 +1,6 @@
 package com.um.cloudfixum.cloudfixum.config;
 
+import com.um.cloudfixum.cloudfixum.common.Constant;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +23,11 @@ public class CustomErrorController implements ErrorController {
         int statusCode = Integer.parseInt(status.toString());
 
         if (statusCode == HttpStatus.NOT_FOUND.value()) {
-            jsonError.put("error", "Not found");
+            jsonError.put(Constant.ERROR, Constant.NOT_FOUND);
             return new ResponseEntity<>(jsonError, HttpStatus.NOT_FOUND);
         }
 
-        jsonError.put("error", String.valueOf(statusCode));
+        jsonError.put(Constant.ERROR, String.valueOf(statusCode));
         return new ResponseEntity<>(jsonError, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
