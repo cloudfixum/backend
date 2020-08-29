@@ -27,7 +27,7 @@ public class ProviderUser implements Serializable, Identificable {
     private Long id;
 
     @NotEmpty(message = Constant.DNI_NEEDED)
-    @Size(min =5, max = 8, message = Constant.DNI_CHARACTERS)
+    @Size(min = 5, max = 8, message = Constant.DNI_CHARACTERS)
     private String dni;
 
     @NotEmpty(message = Constant.NAME_NEEDED)

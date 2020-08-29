@@ -1,4 +1,5 @@
 package com.um.cloudfixum.cloudfixum.model;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;

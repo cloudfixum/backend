@@ -1,5 +1,6 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
+import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.service.ProviderUserService;
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -28,6 +30,12 @@ public class ProviderUserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ProviderUser> getUserByID(@PathVariable Long id) {
         return providerUserService.getById(id);
+    }
+
+    @GetMapping("/{id}/jobs")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<MinorJob>> getJobsByUserID(@PathVariable Long id) {
+        return providerUserService.getJobs(id);
     }
 
     @DeleteMapping("/{id}")
