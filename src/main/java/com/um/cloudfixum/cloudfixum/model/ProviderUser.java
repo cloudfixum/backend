@@ -5,12 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -20,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 
 @Entity
-public class ProviderUser implements Serializable, Identificable {
+public class ProviderUser implements Serializable, Identificable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +45,11 @@ public class ProviderUser implements Serializable, Identificable {
     @Email
     private String email;
 
+    @NotEmpty(message = "PASSWORD PLS")
+    @Size(min = 8, message = "MINIMO 8")
+    @JsonIgnore
+    private String password;
+
     @NotEmpty(message = Constant.PHONE_NUMBER_NEEDED)
     @Size(min = 10, max = 15, message = Constant.MESSAGE_PHONE_NUMBER)
     private String phone_number;
@@ -54,4 +62,38 @@ public class ProviderUser implements Serializable, Identificable {
     @JsonIgnore
     private List<MinorJob> serviceList;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

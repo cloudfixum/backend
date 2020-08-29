@@ -27,8 +27,15 @@ public class CustomErrorController implements ErrorController {
             return new ResponseEntity<>(jsonError, HttpStatus.NOT_FOUND);
         }
 
+        if (statusCode == HttpStatus.FORBIDDEN.value()) {
+            jsonError.put("status", "403");
+            jsonError.put(Constant.ERROR, "Forbidden");
+            jsonError.put("message", "Access denied");
+            return new ResponseEntity<>(jsonError, HttpStatus.FORBIDDEN);
+        }
+
         jsonError.put(Constant.ERROR, String.valueOf(statusCode));
-        return new ResponseEntity<>(jsonError, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(jsonError, HttpStatus.valueOf(statusCode));
 
     }
 
