@@ -3,21 +3,12 @@ package com.um.cloudfixum.cloudfixum.common;
 public class Constant {
     // CorsConfiguration
     public static final String BAR_ASTERISK = "/**";
-    public static final String METHOD_GET = "GET";
-    public static final String METHOD_POST = "POST";
-    public static final String METHOD_PUT = "PUT";
-    public static final String METHOD_DELETE = "DELETE";
-    public static final String METHOD_HEAD = "HEAD";
+    public static final String[] ALLOWED_METHODS = {"GET", "POST", "PUT", "DELETE", "HEAD"};
+    public static final String[] EXPOSED_HEADERS = {"Prev", "Next", "CurrentPage", "Size", "TotalPages", "TotalRecords"};
     public static final String HTTP_LOCALHOST = "http://localhost:3000";
     public static final String HTTP_DEVELOP_HEROKU_FRONT = "https://cloudfixum-develop.herokuapp.com";
     public static final String HTTP_MASTER_HEROKU_FRONT = "https://cloudfixum.herokuapp.com";
     public static final String ASTERISK = "*";
-    public static final String PREV = "Prev";
-    public static final String NEXT = "Next";
-    public static final String CURRENT_PAGE = "CurrentPage";
-    public static final String SIZE = "Size";
-    public static final String TOTAL_PAGES = "TotalPages";
-    public static final String TOTAL_RECORDS = "TotalRecords";
 
     //CustomErrorController
     public static final String ERROR = "error";
