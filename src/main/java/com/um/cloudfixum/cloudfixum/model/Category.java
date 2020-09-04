@@ -27,7 +27,7 @@ public enum Category {
     AIRCON_TECH("Air Conditioning Technician", "https://i.imgur.com/skB4K1i.jpg"),
     PAINTER("Painter", "https://i.imgur.com/xGLvtIZ.jpg"),
     LOCKSMITH("Locksmith","https://i.imgur.com/uwEvBK8.jpg"),
-    OTHER("Other","https://i.imgur.com/0T0mIYM.png");
+    OTHER("Other","https://i.imgur.com/8CJYXG0.jpg");
 
     private String name;
     private String image_url;
