@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -49,6 +51,13 @@ public class ProviderUser implements Serializable, Identificable {
     @NotEmpty(message = Constant.ADDRESS_NEEDED)
     @Size(min = 6, max = 40, message = Constant.ADDRESS_CHARACTERS)
     private String address;
+
+    @NotEmpty(message = Constant.LOCATION_NEEDED)
+    @Size(min = 6, max = 40, message = Constant.LOCATION_CHARACTERS)
+    private String location;
+
+    @DateTimeFormat(pattern = Constant.FORMAT_DATE)
+    private LocalDate birthday;
 
     @OneToMany(mappedBy = Constant.SERVICE_PROVIDER)
     @JsonIgnore

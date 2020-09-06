@@ -42,7 +42,9 @@ public class Constant {
     public static final String PHONE_NUMBER_NEEDED = "Phone number needed";
     public static final String MESSAGE_PHONE_NUMBER = "Format: +5492604303030";
     public static final String ADDRESS_NEEDED = "Address needed";
-    public static final String ADDRESS_CHARACTERS = "Location requires between 6 and 40 characters long";
+    public static final String ADDRESS_CHARACTERS = "Address requires between 6 and 40 characters long";
+    public static final String LOCATION_NEEDED = "Location needed";
+    public static final String LOCATION_CHARACTERS = "Location requires between 6 and 40 characters long";
     public static final String SERVICE_PROVIDER = "serviceProvider";
 
 }
