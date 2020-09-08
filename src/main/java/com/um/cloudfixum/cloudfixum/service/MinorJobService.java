@@ -33,7 +33,7 @@ public class MinorJobService extends GenericServiceImpl<MinorJob> {
 
         for (MinorJob minorJob : serviceProvider.get().getServiceList()) {
             if (minorJob.equals(job)) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }
 
