@@ -28,7 +28,7 @@ public class CustomErrorController implements ErrorController {
         }
 
         jsonError.put(Constant.ERROR, String.valueOf(statusCode));
-        return new ResponseEntity<>(jsonError, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(jsonError, HttpStatus.valueOf(statusCode));
 
     }
 
