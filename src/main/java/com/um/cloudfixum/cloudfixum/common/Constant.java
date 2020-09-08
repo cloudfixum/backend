@@ -33,18 +33,20 @@ public class Constant {
 
     //Model ProviderUser
     public static final String DNI_NEEDED = "Identification needed";
-    public static final String DNI_CHARACTERS = "ID must be between 5 and 8 characters long";
+    public static final String DNI_CHARACTERS = "DNI must be between 5 and 9 characters long";
     public static final String NAME_NEEDED = "Service provider name needed";
     public static final String NAME_CHARACTERS = "Service provider name must be between 3 and 40 characters long";
     public static final String LAST_NAME_NEEDED = "last name needed";
     public static final String LAST_NAME_CHARACTERS = "last name must be between 5 and 40 characters long";
     public static final String EMAIL_NEEDED = "Email needed";
+    public static final String EMAIL_FORMAT = "Invalid Email format";
     public static final String PHONE_NUMBER_NEEDED = "Phone number needed";
     public static final String MESSAGE_PHONE_NUMBER = "Format: +5492604303030";
     public static final String ADDRESS_NEEDED = "Address needed";
     public static final String ADDRESS_CHARACTERS = "Address requires between 6 and 40 characters long";
     public static final String LOCATION_NEEDED = "Location needed";
     public static final String LOCATION_CHARACTERS = "Location requires between 6 and 40 characters long";
+    public static final String SERVICE_PROVIDER_MISSING = "MinorJob must have a serviceProvider field";
     public static final String SERVICE_PROVIDER = "serviceProvider";
 
 }

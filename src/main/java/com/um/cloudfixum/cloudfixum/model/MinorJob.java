@@ -13,7 +13,6 @@ import javax.validation.constraints.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -44,5 +43,28 @@ public class MinorJob implements Serializable, Identificable {
     private String image_url;
 
     @ManyToOne
+    @NotNull(message = Constant.SERVICE_PROVIDER_MISSING)
     private ProviderUser serviceProvider;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MinorJob)) return false;
+
+        MinorJob minorJob = (MinorJob) o;
+
+        if (!getTitle().equals(minorJob.getTitle())) return false;
+        if (getCategory() != minorJob.getCategory()) return false;
+        return getDescription().equals(minorJob.getDescription());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getTitle().hashCode();
+        result = 31 * result + getCategory().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        result = 31 * result + getServiceProvider().hashCode();
+        return result;
+    }
 }
