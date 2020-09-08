@@ -29,7 +29,7 @@ public class ProviderUser implements Serializable, Identificable {
     private Long id;
 
     @NotEmpty(message = Constant.DNI_NEEDED)
-    @Size(min = 5, max = 8, message = Constant.DNI_CHARACTERS)
+    @Size(min = 5, max = 9, message = Constant.DNI_CHARACTERS)
     private String dni;
 
     @NotEmpty(message = Constant.NAME_NEEDED)
@@ -37,15 +37,15 @@ public class ProviderUser implements Serializable, Identificable {
     private String name;
 
     @NotEmpty(message = Constant.LAST_NAME_NEEDED)
-    @Size(min = 5, max = 40, message = Constant.LAST_NAME_CHARACTERS)
+    @Size(min = 3, max = 40, message = Constant.LAST_NAME_CHARACTERS)
     private String last_name;
 
     @NotEmpty(message = Constant.EMAIL_NEEDED)
-    @Email
+    @Email(message = Constant.EMAIL_FORMAT)
     private String email;
 
     @NotEmpty(message = Constant.PHONE_NUMBER_NEEDED)
-    @Size(min = 10, max = 15, message = Constant.MESSAGE_PHONE_NUMBER)
+    @Size(min = 6, max = 15, message = Constant.MESSAGE_PHONE_NUMBER)
     private String phone_number;
 
     @NotEmpty(message = Constant.ADDRESS_NEEDED)
