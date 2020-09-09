@@ -4,12 +4,8 @@ package com.um.cloudfixum.cloudfixum.controller;
 import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.service.ProviderUserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-
 
 
 @CrossOrigin
@@ -25,8 +21,9 @@ public class HomeController {
     public RedirectView home() {
         return new RedirectView("/swagger-ui.html");
     }
-    @GetMapping("/authenticate")
-    public ResponseEntity<ProviderUser> login(@RequestBody ProviderUser providerUser){
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<ProviderUser> login(@RequestBody ProviderUser providerUser) {
         return providerUserService.findUserByDni(providerUser.getDni());
     }
 }
