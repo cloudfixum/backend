@@ -31,11 +31,11 @@ public enum Category {
 
     private String name;
     private String image_url;
-    private String subCategory;
+    private String superCategory;
 
-    Category (String name, String image_url, String subCategory) {
+    Category (String name, String image_url, String superCategory) {
         this.name = name;
         this. image_url = image_url;
-        this.name = subCategory;
+        this.name = superCategory;
     }
 }
