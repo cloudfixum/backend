@@ -2,6 +2,7 @@ package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +26,11 @@ public class MinorJobController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<MinorJob>> getAllService(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, HttpServletRequest request) {
+    public ResponseEntity<List<MinorJob>> getAllService(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "q", required = false) String q, HttpServletRequest request) {
+        //System.out.println(minorJobService.filterBySubCategory(q));
+        ResponseEntity<List<MinorJob>> jobList = (q != null) ? minorJobService.filterByTitle(q) : minorJobService.getAll();
         size = (size == null || size < 1) ? 9 : size;
-        return (page == null || page < 0) ? minorJobService.getAll() : minorJobService.findByPage(page, size, request);
+        return (page == null || page < 0) ? jobList : minorJobService.findByPage(page, size, request); //antes despues del ? estaba el getAll()
     }
 
     @GetMapping("/{id}")
