@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 
@@ -37,7 +37,7 @@ public class MinorJob implements Serializable, Identificable {
     @Size(max = 256, message = Constant.DESCRIPTION_CHARACTERS_LONG)
     private String description;
 
-    @DateTimeFormat(pattern = Constant.FORMAT_DATE)
+    @JsonFormat(pattern = Constant.FORMAT_DATE)
     private LocalDate date;
 
     private String image_url;

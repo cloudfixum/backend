@@ -29,7 +29,7 @@ public class Constant {
     public static final String PRICE_NOT_NULL = "Price can't be null";
     public static final String PROVIDE_DESCRIPTION = "You must provide a description";
     public static final String DESCRIPTION_CHARACTERS_LONG = "Description can't exceed 256 characters long";
-    public static final String FORMAT_DATE = "yyyy-MM-dd";
+    public static final String FORMAT_DATE = "dd-MM-yyyy";
 
     //Model ProviderUser
     public static final String DNI_NEEDED = "Identification needed";
