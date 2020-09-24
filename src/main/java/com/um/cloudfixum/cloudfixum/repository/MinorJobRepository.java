@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface MinorJobRepository extends JpaRepository <MinorJob, Long> {
-    List<MinorJob> findByTitleContaining(String title);
+    List<MinorJob> findByTitleContainingOrDescriptionContaining(String title_query, String description_query);
     //List<MinorJob> findByCategoryName(String name);
     //List<MinorJob> findByCategorySuperCategory(String super_category);
 }

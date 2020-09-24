@@ -44,9 +44,9 @@ public class MinorJobService extends GenericServiceImpl<MinorJob> {
         return super.create(job);
     }
 
-    public ResponseEntity<List<MinorJob>> filterByTitle(String query) {
-        if (minorJobRepository.findByTitleContaining(query).size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(minorJobRepository.findByTitleContaining(query), HttpStatus.OK);
+    public ResponseEntity<List<MinorJob>> filterByTitleOrDescription(String query_title, String query_description) {
+        if (minorJobRepository.findByTitleContainingOrDescriptionContaining(query_title, query_description).size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(minorJobRepository.findByTitleContainingOrDescriptionContaining(query_title, query_description), HttpStatus.OK);
     }
 
     public ResponseEntity<List<MinorJob>> filterBySubCategory(String query) {
@@ -59,6 +59,15 @@ public class MinorJobService extends GenericServiceImpl<MinorJob> {
         if (minorJobList.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(minorJobList, HttpStatus.OK);
     }
+    //estos 3 filtros deben retornar joblist sin responseEntity
+    public ResponseEntity<List<MinorJob>> applyFilter(String query_title, String query_subcategory, String query_supercategory) {
+        boolean title_or_description_exists = query_title != null;
+        boolean subcategory_exists = query_subcategory != null;
+        boolean supercategory_exists = query_supercategory != null;
+        (title_or_description_exists || subcategory_exists || subcategory_exists) ? return
+    }
+    //buscar logica para verificar el booleano que este en true, llamar al filtro que corresponda
+
     @Override
     public JpaRepository<MinorJob, Long> getRepository() {
         return minorJobRepository;
