@@ -15,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MinorJobService extends GenericServiceImpl<MinorJob> {
@@ -43,16 +44,21 @@ public class MinorJobService extends GenericServiceImpl<MinorJob> {
         return super.create(job);
     }
 
-    public ResponseEntity<List<MinorJob>> filterByTitle(String query){
+    public ResponseEntity<List<MinorJob>> filterByTitle(String query) {
         if (minorJobRepository.findByTitleContaining(query).size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        return  new ResponseEntity<>(minorJobRepository.findByTitleContaining(query),HttpStatus.OK);
+        return new ResponseEntity<>(minorJobRepository.findByTitleContaining(query), HttpStatus.OK);
     }
 
-    /*public ResponseEntity<List<MinorJob>> filterBySubCategory(String query){
-        if (minorJobRepository.findByCategoryName(query).size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        return  new ResponseEntity<>(minorJobRepository.findByCategoryName(query),HttpStatus.OK);
-    }*/
-
+    public ResponseEntity<List<MinorJob>> filterBySubCategory(String query) {
+        List<MinorJob> minorJobList = minorJobRepository.findAll().stream().filter(e -> e.getCategory().getName().equalsIgnoreCase(query)).collect(Collectors.toList());
+        if (minorJobList.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(minorJobList, HttpStatus.OK);
+    }
+    public ResponseEntity<List<MinorJob>> filterBySuperCategory(String query) {
+        List<MinorJob> minorJobList = minorJobRepository.findAll().stream().filter(e -> e.getCategory().getSuperCategory().equalsIgnoreCase(query)).collect(Collectors.toList());
+        if (minorJobList.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(minorJobList, HttpStatus.OK);
+    }
     @Override
     public JpaRepository<MinorJob, Long> getRepository() {
         return minorJobRepository;
