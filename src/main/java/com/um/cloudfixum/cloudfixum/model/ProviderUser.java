@@ -1,6 +1,7 @@
 package com.um.cloudfixum.cloudfixum.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -30,7 +32,7 @@ public class ProviderUser implements Serializable, Identificable, UserDetails {
     private Long id;
 
     @NotEmpty(message = Constant.DNI_NEEDED)
-    @Size(min = 5, max = 8, message = Constant.DNI_CHARACTERS)
+    @Size(min = 5, max = 9, message = Constant.DNI_CHARACTERS)
     private String dni;
 
     @NotEmpty(message = Constant.NAME_NEEDED)
@@ -38,11 +40,11 @@ public class ProviderUser implements Serializable, Identificable, UserDetails {
     private String name;
 
     @NotEmpty(message = Constant.LAST_NAME_NEEDED)
-    @Size(min = 5, max = 40, message = Constant.LAST_NAME_CHARACTERS)
+    @Size(min = 3, max = 40, message = Constant.LAST_NAME_CHARACTERS)
     private String last_name;
 
     @NotEmpty(message = Constant.EMAIL_NEEDED)
-    @Email
+    @Email(message = Constant.EMAIL_FORMAT)
     private String email;
 
     @NotEmpty(message = "PASSWORD PLS")
@@ -51,12 +53,19 @@ public class ProviderUser implements Serializable, Identificable, UserDetails {
     private String password;
 
     @NotEmpty(message = Constant.PHONE_NUMBER_NEEDED)
-    @Size(min = 10, max = 15, message = Constant.MESSAGE_PHONE_NUMBER)
+    @Size(min = 6, max = 15, message = Constant.MESSAGE_PHONE_NUMBER)
     private String phone_number;
 
     @NotEmpty(message = Constant.ADDRESS_NEEDED)
     @Size(min = 6, max = 40, message = Constant.ADDRESS_CHARACTERS)
     private String address;
+
+    @NotEmpty(message = Constant.LOCATION_NEEDED)
+    @Size(min = 6, max = 40, message = Constant.LOCATION_CHARACTERS)
+    private String location;
+
+    @JsonFormat(pattern = Constant.FORMAT_DATE)
+    private LocalDate birthday;
 
     @OneToMany(mappedBy = Constant.SERVICE_PROVIDER)
     @JsonIgnore

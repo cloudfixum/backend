@@ -15,10 +15,10 @@ public class CorsConfiguration {
             public void addCorsMappings(CorsRegistry registry) {
                 registry
                         .addMapping(Constant.BAR_ASTERISK)
-                        .allowedMethods(Constant.METHOD_GET, Constant.METHOD_POST, Constant.METHOD_PUT, Constant.METHOD_DELETE, Constant.METHOD_HEAD)
+                        .allowedMethods(Constant.ALLOWED_METHODS)
                         .allowedOrigins(Constant.HTTP_LOCALHOST, Constant.HTTP_DEVELOP_HEROKU_FRONT, Constant.HTTP_MASTER_HEROKU_FRONT)
                         .allowedHeaders(Constant.ASTERISK)
-                        .exposedHeaders(Constant.PREV, Constant.NEXT, Constant.CURRENT_PAGE, Constant.SIZE, Constant.TOTAL_PAGES, Constant.TOTAL_RECORDS);
+                        .exposedHeaders(Constant.EXPOSED_HEADERS);
             }
         };
     }

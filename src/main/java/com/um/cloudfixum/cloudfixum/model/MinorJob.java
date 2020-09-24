@@ -4,16 +4,15 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -38,11 +37,34 @@ public class MinorJob implements Serializable, Identificable {
     @Size(max = 256, message = Constant.DESCRIPTION_CHARACTERS_LONG)
     private String description;
 
-    @DateTimeFormat(pattern = Constant.FORMAT_DATE)
+    @JsonFormat(pattern = Constant.FORMAT_DATE)
     private LocalDate date;
 
     private String image_url;
 
     @ManyToOne
+    @NotNull(message = Constant.SERVICE_PROVIDER_MISSING)
     private ProviderUser serviceProvider;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MinorJob)) return false;
+
+        MinorJob minorJob = (MinorJob) o;
+
+        if (!getTitle().equals(minorJob.getTitle())) return false;
+        if (getCategory() != minorJob.getCategory()) return false;
+        return getDescription().equals(minorJob.getDescription());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getTitle().hashCode();
+        result = 31 * result + getCategory().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        result = 31 * result + getServiceProvider().hashCode();
+        return result;
+    }
 }
