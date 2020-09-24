@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface ProviderUserRepository extends JpaRepository<ProviderUser, Long> {
 
     ProviderUser findByEmail(String email);
-    Optional<ProviderUser> findByDni(String dni);
+
 
 }

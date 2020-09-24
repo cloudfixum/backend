@@ -49,7 +49,6 @@ public class ProviderUser implements Serializable, Identificable, UserDetails {
 
     @NotEmpty(message = "PASSWORD PLS")
     @Size(min = 8, message = "MINIMO 8")
-    @JsonIgnore
     private String password;
 
     @NotEmpty(message = Constant.PHONE_NUMBER_NEEDED)

@@ -28,12 +28,13 @@ public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
 
     }
 
-    public ResponseEntity<ProviderUser> findUserByDni(String dni){
-        if (!providerUserRepository.findByDni(dni).isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        ProviderUser providerUser = providerUserRepository.findByDni(dni).get();
-        return new ResponseEntity<>(providerUser,HttpStatus.OK);
+    @Override
+    public ResponseEntity<ProviderUser> create(ProviderUser user) {
+        if(providerUserRepository.findByEmail(user.getEmail()) != null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return super.create(user);
     }
-
 
     @Override
     public JpaRepository<ProviderUser, Long> getRepository() {

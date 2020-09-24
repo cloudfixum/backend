@@ -21,12 +21,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @CrossOrigin
 @RestController
 public class HomeController {
 
-    private final ProviderUserService providerUserService;
     private final AuthenticationManager authenticationManager;
     private final MyUserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
@@ -35,7 +37,6 @@ public class HomeController {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
-        this.providerUserService = providerUserService;
     }
 
     @GetMapping
@@ -50,7 +51,15 @@ public class HomeController {
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Incorrect username or password", e);
+
+            Map<String, String> response = new HashMap<>();
+
+            response.put("status", "403");
+            response.put("Error", "Forbidden");
+            response.put("message", "Incorrect username or password");
+
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
