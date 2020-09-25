@@ -4,6 +4,7 @@ import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +52,10 @@ public class MinorJobController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id) {
+    public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id, Authentication authentication) {
+        if(!authentication.getName().equals(minorJobService.getRepository().getOne(id).getServiceProvider().getEmail())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         return minorJobService.delete(id);
     }
 }
