@@ -5,6 +5,7 @@ import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.service.ProviderUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -40,7 +41,10 @@ public class ProviderUserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id, Authentication authentication) {
+        if (!authentication.getName().equals(providerUserService.getRepository().getOne(id).getEmail())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         return providerUserService.delete(id);
     }
 
