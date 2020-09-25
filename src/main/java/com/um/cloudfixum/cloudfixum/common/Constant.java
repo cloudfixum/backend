@@ -48,5 +48,7 @@ public class Constant {
     public static final String LOCATION_CHARACTERS = "Location requires between 6 and 40 characters long";
     public static final String SERVICE_PROVIDER_MISSING = "MinorJob must have a serviceProvider field";
     public static final String SERVICE_PROVIDER = "serviceProvider";
+    public static final String PASSWORD_NEEDED = "Password required";
+    public static final String PASSWORD_CHARACTERS = "Password requires a minimum of 8 characters";
 
 }

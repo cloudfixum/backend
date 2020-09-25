@@ -47,8 +47,8 @@ public class ProviderUser implements Serializable, Identificable, UserDetails {
     @Email(message = Constant.EMAIL_FORMAT)
     private String email;
 
-    @NotEmpty(message = "PASSWORD PLS")
-    @Size(min = 8, message = "MINIMO 8")
+    @NotEmpty(message = Constant.PASSWORD_NEEDED)
+    @Size(min = 8, message = Constant.PASSWORD_CHARACTERS)
     private String password;
 
     @NotEmpty(message = Constant.PHONE_NUMBER_NEEDED)
