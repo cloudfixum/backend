@@ -41,27 +41,30 @@ public class MinorJobService extends GenericServiceImpl<MinorJob> {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }
-
         job.setServiceProvider(serviceProvider.get());
         return super.create(job);
     }
 
-    public ResponseEntity<List<MinorJob>> filterByTitleOrDescription(String query_title, String query_description) {
-        if (minorJobRepository.findByTitleContainingOrDescriptionContaining(query_title, query_description).size() == 0)
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(minorJobRepository.findByTitleContainingOrDescriptionContaining(query_title, query_description), HttpStatus.OK);
+    public List<MinorJob> filterByTitleOrDescription(String query_title, String query_description,List<MinorJob> minorJobList) {
+        List<MinorJob> auxList = new ArrayList<>();
+        for (MinorJob i: minorJobRepository.findAll()) {
+            if (!minorJobRepository.findByTitleContainingOrDescriptionContaining(query_title, query_description).contains(i)){
+                auxList.add(i);
+            }
+        }
+        minorJobList.removeAll(auxList);
+        return minorJobList;
     }
 
-    public ResponseEntity<List<MinorJob>> filterBySubCategory(String query) { //2°
-        List<MinorJob> minorJobList = minorJobRepository.findAll().stream().filter(e -> e.getCategory().getName().equalsIgnoreCase(query)).collect(Collectors.toList());
-        if (minorJobList.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(minorJobList, HttpStatus.OK);
+    public List<MinorJob> filterBySubCategory(String query, List<MinorJob> minorJobList) {
+        return minorJobList.stream().filter(e -> e.getCategory().getName().equalsIgnoreCase(query)).collect(Collectors.toList());
     }
 
-    public ResponseEntity<List<MinorJob>> filterBySuperCategory(String query) {
-        List<MinorJob> minorJobList = minorJobRepository.findAll().stream().filter(e -> e.getCategory().getSuperCategory().equalsIgnoreCase(query)).collect(Collectors.toList());
-        if (minorJobList.size() == 0) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(minorJobList, HttpStatus.OK);
+    public List<MinorJob> filterBySuperCategory(String query, List<MinorJob> minorJobList) {
+        for (MinorJob i: minorJobList.stream().filter(e -> e.getCategory().getSuperCategory().equalsIgnoreCase(query)).collect(Collectors.toList())){
+            System.out.println(i.getCategory());
+        }
+        return minorJobList.stream().filter(e -> e.getCategory().getSuperCategory().equalsIgnoreCase(query)).collect(Collectors.toList());
     }
 
     public ResponseEntity<List<Category>> filterBySuperCategoryAux(String query) { //1° //Forma cuando tenemos 3 vistas. Devuelve lista de subcategorias de una supercategoria.
@@ -74,19 +77,7 @@ public class MinorJobService extends GenericServiceImpl<MinorJob> {
         if (categoryList.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
-
-    //estos 3 filtros deben retornar joblist sin responseEntity
-    public ResponseEntity<List<MinorJob>> applyFilter(String query_title, String query_subcategory, String query_supercategory) {
-        boolean title_or_description_exists = query_title != null;
-        boolean subcategory_exists = query_subcategory != null;
-        boolean supercategory_exists = query_supercategory != null;
-        if (title_or_description_exists){
-            
-        }
-
-    }
-    //buscar logica para verificar el booleano que este en true, llamar al filtro que corresponda
-
+    
     @Override
     public JpaRepository<MinorJob, Long> getRepository() {
         return minorJobRepository;
