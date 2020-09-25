@@ -5,12 +5,11 @@ import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.repository.MinorJobRepository;
 import com.um.cloudfixum.cloudfixum.repository.ProviderUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Optional;
 
@@ -23,6 +22,19 @@ public class MinorJobService extends GenericServiceImpl<MinorJob> {
     public MinorJobService(MinorJobRepository minorJobRepository, ProviderUserRepository providerUserRepository) {
         this.minorJobRepository = minorJobRepository;
         this.providerUserRepository = providerUserRepository;
+    }
+
+    public Boolean isOwner(Authentication auth, MinorJob minorJob) {
+        if(auth == null || auth.getName() == null) {
+            return Boolean.FALSE;
+        }
+
+        if(!minorJob.getServiceProvider().getId().equals(providerUserRepository.findByEmail(auth.getName()).getId())){
+            return Boolean.FALSE;
+        }
+
+        return Boolean.TRUE;
+
     }
 
     @Override
@@ -39,6 +51,15 @@ public class MinorJobService extends GenericServiceImpl<MinorJob> {
 
         job.setServiceProvider(serviceProvider.get());
         return super.create(job);
+    }
+
+    @Override
+    public ResponseEntity<MinorJob> update(MinorJob job) {
+        Optional<ProviderUser> serviceProvider = providerUserRepository.findById(job.getServiceProvider().getId());
+        if (!serviceProvider.isPresent()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        job.setServiceProvider(serviceProvider.get());
+
+        return super.update(job);
     }
 
     @Override

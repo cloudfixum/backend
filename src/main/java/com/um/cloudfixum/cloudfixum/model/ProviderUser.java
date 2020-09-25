@@ -66,7 +66,7 @@ public class ProviderUser implements Serializable, Identificable, UserDetails {
     @JsonFormat(pattern = Constant.FORMAT_DATE)
     private LocalDate birthday;
 
-    @OneToMany(mappedBy = Constant.SERVICE_PROVIDER)
+    @OneToMany(mappedBy = Constant.SERVICE_PROVIDER, cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<MinorJob> serviceList;
 
