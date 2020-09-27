@@ -3,6 +3,7 @@ package com.um.cloudfixum.cloudfixum.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
@@ -51,6 +52,7 @@ public class ProviderUser implements Serializable, Identificable, UserDetails {
 
     @NotEmpty(message = Constant.PASSWORD_NEEDED)
     @Size(min = 8, message = Constant.PASSWORD_CHARACTERS)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @NotEmpty(message = Constant.PHONE_NUMBER_NEEDED)
@@ -74,6 +76,7 @@ public class ProviderUser implements Serializable, Identificable, UserDetails {
     private List<MinorJob> serviceList;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
@@ -89,21 +92,25 @@ public class ProviderUser implements Serializable, Identificable, UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

@@ -43,7 +43,7 @@ public class ProviderUserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id, Authentication authentication) {
         Optional<ProviderUser> user = providerUserService.getRepository().findById(id);
-        if (user.isPresent() && user.get().getEmail().equals(authentication.getName())) {
+        if (authentication != null && user.isPresent() && user.get().getEmail().equals(authentication.getName())) {
             return providerUserService.delete(id);
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -52,7 +52,7 @@ public class ProviderUserController {
     @PutMapping
     public ResponseEntity<ProviderUser> updateUser(@Valid @RequestBody ProviderUser providerUser, Authentication authentication) {
         Optional<ProviderUser> user = providerUserService.getRepository().findById(providerUser.getId());
-        if (user.isPresent() && user.get().getEmail().equals(authentication.getName())) {
+        if (authentication != null && user.isPresent() && user.get().getEmail().equals(authentication.getName())) {
             return providerUserService.update(providerUser);
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
