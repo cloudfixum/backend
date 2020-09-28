@@ -48,12 +48,13 @@ public enum Category {
     AIRCON_TECH("Air Conditioning Technician", "https://i.imgur.com/skB4K1i.jpg", "Home"),
     PAINTER("Painter", "https://i.imgur.com/xGLvtIZ.jpg", "Home"),
     LOCKSMITH("Locksmith","https://i.imgur.com/uwEvBK8.jpg", "Home"),
+    TECH_SERVICE("Technician Service", "https://i.imgur.com/E12Dt8x.jpg", "Home"),
 
-
+    PRIVATE_TUTORING("Private Tutoring ", "https://i.imgur.com/QqCTxal.jpg", "Other"),
+    BLACKSMITH("Blacksmith", "https://i.imgur.com/rTgbZyf.jpg", "Other"),
+    COBBLER("Cobbler", "https://i.imgur.com/JDIwRmx.jpg", "Other"),
     OTHER("Other","https://i.imgur.com/8CJYXG0.jpg", "Other");
-
-
-
+    
     private String name;
     private String image_url;
     private String superCategory;
