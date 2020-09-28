@@ -34,6 +34,13 @@ public class CustomErrorController implements ErrorController {
             return new ResponseEntity<>(jsonError, HttpStatus.FORBIDDEN);
         }
 
+        if (statusCode == HttpStatus.UNAUTHORIZED.value()) {
+            jsonError.put("status", "401");
+            jsonError.put(Constant.ERROR, "Unauthorized");
+            jsonError.put("message", "Invalid jwt");
+            return new ResponseEntity<>(jsonError, HttpStatus.UNAUTHORIZED);
+        }
+
         jsonError.put(Constant.ERROR, String.valueOf(statusCode));
         return new ResponseEntity<>(jsonError, HttpStatus.valueOf(statusCode));
 
