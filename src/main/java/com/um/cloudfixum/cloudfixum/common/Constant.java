@@ -51,4 +51,12 @@ public class Constant {
     public static final String PASSWORD_NEEDED = "Password required";
     public static final String PASSWORD_CHARACTERS = "Password requires a minimum of 8 characters";
 
+    //Enum
+    public static final String SUPERCATEGORY_HOME = "Home";
+    public static final String SUPERCATEGORY_HEALTH = "Health";
+    public static final String SUPERCATEGORY_OTHER = "Other";
+    public static final String SUPERCATEGORY_BEAUTY = "Beauty";
+    public static final String SUPERCATEGORY_VEHICLE = "Vehicle";
+    public static final String SUPERCATEGORY_WELLNESS = "Wellness";
+
 }
