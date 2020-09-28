@@ -2,15 +2,16 @@ package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -47,23 +48,39 @@ public class MinorJobController {
         return minorJobService.getById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<MinorJob> addService(@Valid @RequestBody MinorJob service) {
-        service.setDate(LocalDate.now());
-        service.setImage_url(service.getCategory().getImage_url());
 
-        return minorJobService.create(service);
+    @PostMapping
+    public ResponseEntity<MinorJob> addService(@Valid @RequestBody MinorJob service, Authentication authentication) {
+
+        if(authentication != null && authentication.isAuthenticated()){
+            service.setDate(LocalDate.now());
+            service.setImage_url(service.getCategory().getImage_url());
+
+            return minorJobService.create(service);
+        }
+
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @PutMapping
-    public ResponseEntity<MinorJob> updateService(@Valid @RequestBody MinorJob minorJob) {
-        minorJob.setImage_url(minorJob.getCategory().getImage_url());
+    public ResponseEntity<MinorJob> updateService(@Valid @RequestBody MinorJob minorJob, Authentication authentication) {
 
+        if (!minorJobService.isOwner(authentication, minorJob)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        minorJob.setImage_url(minorJob.getCategory().getImage_url());
         return minorJobService.update(minorJob);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id) {
-        return minorJobService.delete(id);
+    public ResponseEntity<HttpStatus> deleteService(@PathVariable Long id, Authentication authentication) {
+        Optional<MinorJob> minorJob = minorJobService.getRepository().findById(id);
+
+        if (!minorJob.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return minorJobService.isOwner(authentication, minorJob.get()) ? minorJobService.delete(id) : new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 }

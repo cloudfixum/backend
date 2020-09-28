@@ -7,6 +7,7 @@ import com.um.cloudfixum.cloudfixum.repository.ProviderUserRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +16,11 @@ import java.util.List;
 public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
 
     private final ProviderUserRepository providerUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ProviderUserService(ProviderUserRepository providerUserRepository) {
+    public ProviderUserService(ProviderUserRepository providerUserRepository, PasswordEncoder passwordEncoder) {
         this.providerUserRepository = providerUserRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public ResponseEntity<List<MinorJob>> getJobs(Long id) {
@@ -28,12 +31,15 @@ public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
 
     }
 
-    public ResponseEntity<ProviderUser> findUserByDni(String dni){
-        if (!providerUserRepository.findByDni(dni).isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        ProviderUser providerUser = providerUserRepository.findByDni(dni).get();
-        return new ResponseEntity<>(providerUser,HttpStatus.OK);
+    @Override
+    public ResponseEntity<ProviderUser> create(ProviderUser user) {
+        if (providerUserRepository.findByEmail(user.getEmail()) != null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        getRepository().save(user);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
-
 
     @Override
     public JpaRepository<ProviderUser, Long> getRepository() {
