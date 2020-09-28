@@ -49,4 +49,12 @@ public class Constant {
     public static final String SERVICE_PROVIDER_MISSING = "MinorJob must have a serviceProvider field";
     public static final String SERVICE_PROVIDER = "serviceProvider";
 
+    //Enum
+    public static final String SUPERCATEGORY_HOME = "Home";
+    public static final String SUPERCATEGORY_HEALTH = "Health";
+    public static final String SUPERCATEGORY_OTHER = "Other";
+    public static final String SUPERCATEGORY_BEAUTY = "Beauty";
+    public static final String SUPERCATEGORY_VEHICLE = "Vehicle";
+    public static final String SUPERCATEGORY_WELLNESS = "Wellness";
+
 }
