@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -36,10 +37,10 @@ public class MinorJobController {
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<MinorJob>> filterService(@RequestParam(value = "text", required = false) String text, @RequestParam(value = "subquery", required = false) String sub_query,@RequestParam(value = "superquery", required = false) String super_query){
-        List<MinorJob> minorJobList = minorJobService.getAll().getBody();
-        minorJobList = (text != null) ? minorJobService.filterByTitleOrDescription(text,text,minorJobList) : minorJobList;
-        minorJobList = (sub_query != null) ? minorJobService.filterBySubCategory(sub_query,minorJobList) : minorJobList;
-        minorJobList = (super_query != null) ? minorJobService.filterBySuperCategory(super_query,minorJobList) : minorJobList;
+        List<MinorJob> minorJobList = minorJobService.getRepository().findAll();
+        minorJobList = (text != null) ? minorJobService.filterByTitleOrDescription(text,text) : minorJobList;
+        minorJobList = (sub_query != null) ? minorJobList.stream().filter(e -> e.getCategory().getName().equalsIgnoreCase(sub_query)).collect(Collectors.toList()) : minorJobList;
+        minorJobList = (super_query != null) ? minorJobList.stream().filter(e -> e.getCategory().getSuperCategory().equalsIgnoreCase(super_query)).collect(Collectors.toList()) : minorJobList;
         if (minorJobList.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(minorJobList,HttpStatus.OK);
     }
