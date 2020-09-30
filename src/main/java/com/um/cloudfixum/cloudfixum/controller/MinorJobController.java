@@ -1,5 +1,6 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
+import com.um.cloudfixum.cloudfixum.model.Category;
 import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
 import org.springframework.http.HttpStatus;
@@ -29,17 +30,17 @@ public class MinorJobController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<MinorJob>> getAllService(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, HttpServletRequest request) {
-        //System.out.println(minorJobService.filterBySubCategory(q));
+
         size = (size == null || size < 1) ? 9 : size;
-        return (page == null || page < 0) ? minorJobService.getAll() : minorJobService.findByPage(page, size, request); //antes despues del ? estaba el getAll()
+        return (page == null || page < 0) ? minorJobService.getAll() : minorJobService.findByPage(page, size, request);
     }
 
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<MinorJob>> filterService(@RequestParam(value = "text", required = false) String text, @RequestParam(value = "subquery", required = false) String sub_query,@RequestParam(value = "superquery", required = false) String super_query){
+    public ResponseEntity<List<MinorJob>> filterService(@RequestParam(value = "text", required = false) String text, @RequestParam(value = "subquery", required = false) Category sub_query, @RequestParam(value = "superquery", required = false) String super_query){
         List<MinorJob> minorJobList = minorJobService.getRepository().findAll();
         minorJobList = (text != null) ? minorJobService.filterByTitleOrDescription(text,text) : minorJobList;
-        minorJobList = (sub_query != null) ? minorJobList.stream().filter(e -> e.getCategory().getName().equalsIgnoreCase(sub_query)).collect(Collectors.toList()) : minorJobList;
+        minorJobList = (sub_query != null) ? minorJobList.stream().filter(e -> e.getCategory().equals(sub_query)).collect(Collectors.toList()) : minorJobList;
         minorJobList = (super_query != null) ? minorJobList.stream().filter(e -> e.getCategory().getSuperCategory().equalsIgnoreCase(super_query)).collect(Collectors.toList()) : minorJobList;
         if (minorJobList.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(minorJobList,HttpStatus.OK);
