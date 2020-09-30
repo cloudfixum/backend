@@ -29,7 +29,7 @@ public class Constant {
     public static final String PRICE_NOT_NULL = "Price can't be null";
     public static final String PROVIDE_DESCRIPTION = "You must provide a description";
     public static final String DESCRIPTION_CHARACTERS_LONG = "Description can't exceed 256 characters long";
-    public static final String FORMAT_DATE = "yyyy-MM-dd";
+    public static final String FORMAT_DATE = "dd-MM-yyyy";
 
     //Model ProviderUser
     public static final String DNI_NEEDED = "Identification needed";
@@ -46,7 +46,16 @@ public class Constant {
     public static final String ADDRESS_CHARACTERS = "Address requires between 6 and 40 characters long";
     public static final String LOCATION_NEEDED = "Location needed";
     public static final String LOCATION_CHARACTERS = "Location requires between 6 and 40 characters long";
-    public static final String SERVICE_PROVIDER_MISSING = "MinorJob must have a serviceProvider field";
     public static final String SERVICE_PROVIDER = "serviceProvider";
+    public static final String PASSWORD_NEEDED = "Password required";
+    public static final String PASSWORD_CHARACTERS = "Password requires a minimum of 8 characters";
+
+    //Enum
+    public static final String SUPERCATEGORY_HOME = "Home";
+    public static final String SUPERCATEGORY_HEALTH = "Health";
+    public static final String SUPERCATEGORY_OTHER = "Other";
+    public static final String SUPERCATEGORY_BEAUTY = "Beauty";
+    public static final String SUPERCATEGORY_VEHICLE = "Vehicle";
+    public static final String SUPERCATEGORY_WELLNESS = "Wellness";
 
 }

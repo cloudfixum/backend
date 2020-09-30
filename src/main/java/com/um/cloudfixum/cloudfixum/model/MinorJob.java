@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
@@ -38,12 +39,12 @@ public class MinorJob implements Serializable, Identificable {
     private String description;
 
     @DateTimeFormat(pattern = Constant.FORMAT_DATE)
+    @JsonFormat(pattern = Constant.FORMAT_DATE)
     private LocalDate date;
 
     private String image_url;
 
     @ManyToOne
-    @NotNull(message = Constant.SERVICE_PROVIDER_MISSING)
     private ProviderUser serviceProvider;
 
     @Override

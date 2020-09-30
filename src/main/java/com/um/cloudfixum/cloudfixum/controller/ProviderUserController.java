@@ -5,10 +5,12 @@ import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.service.ProviderUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -39,15 +41,22 @@ public class ProviderUserController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
-        return providerUserService.delete(id);
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id, Authentication authentication) {
+        Optional<ProviderUser> user = providerUserService.getRepository().findById(id);
+        if (authentication != null && user.isPresent() && user.get().getEmail().equals(authentication.getName())) {
+            return providerUserService.delete(id);
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProviderUser> updateUser(@Valid @RequestBody ProviderUser providerUser) {
-        return providerUserService.update(providerUser);
+    public ResponseEntity<ProviderUser> updateUser(@Valid @RequestBody ProviderUser providerUser, Authentication authentication) {
+        Optional<ProviderUser> user = providerUserService.getRepository().findById(providerUser.getId());
+        if (authentication != null && user.isPresent() && user.get().getEmail().equals(authentication.getName())) {
+            return providerUserService.update(providerUser);
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
     }
 
 }
