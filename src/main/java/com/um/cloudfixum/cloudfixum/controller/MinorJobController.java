@@ -2,6 +2,7 @@ package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.model.Category;
 import com.um.cloudfixum.cloudfixum.model.MinorJob;
+import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,14 +55,17 @@ public class MinorJobController {
     @PostMapping
     public ResponseEntity<MinorJob> addService(@Valid @RequestBody MinorJob service, Authentication authentication) {
 
-        if(authentication != null && authentication.isAuthenticated()){
-            service.setDate(LocalDate.now());
-            service.setImage_url(service.getCategory().getImage_url());
+        if (authentication == null || !authentication.isAuthenticated())
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
-            return minorJobService.create(service);
-        }
+        ProviderUser serviceProvider = minorJobService.getServiceProviderByToken(authentication);
 
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        service.setServiceProvider(serviceProvider);
+        service.setDate(LocalDate.now());
+        service.setImage_url(service.getCategory().getImage_url());
+
+        return minorJobService.create(service);
+
     }
 
     @PutMapping

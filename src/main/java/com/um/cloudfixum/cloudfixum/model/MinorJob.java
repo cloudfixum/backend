@@ -45,7 +45,6 @@ public class MinorJob implements Serializable, Identificable {
     private String image_url;
 
     @ManyToOne
-    @NotNull(message = Constant.SERVICE_PROVIDER_MISSING)
     private ProviderUser serviceProvider;
 
     @Override
