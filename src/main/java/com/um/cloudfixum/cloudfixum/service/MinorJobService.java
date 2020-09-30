@@ -28,6 +28,10 @@ public class MinorJobService extends GenericServiceImpl<MinorJob> {
         this.providerUserRepository = providerUserRepository;
     }
 
+    public ProviderUser getServiceProviderByToken(Authentication jwt) {
+        return providerUserRepository.findByEmail(jwt.getName());
+    }
+
     public Boolean isOwner(Authentication auth, MinorJob minorJob) {
         if(auth == null || auth.getName() == null) {
             return Boolean.FALSE;
