@@ -30,7 +30,7 @@ public enum Category {
 
     NURSE("Nurse", "https://i.imgur.com/LRC5bwW.jpg",Constant.SUPERCATEGORY_HEALTH),
     NUTRITIONIST("Nutritionist","https://i.imgur.com/DOBwVh8.jpg", Constant.SUPERCATEGORY_HEALTH),
-    PHYCHOLOGIST("Phychologist","https://i.imgur.com/hx1GAFW.jpg",Constant.SUPERCATEGORY_HEALTH),
+    PSYCHOLOGIST("Psychologist","https://i.imgur.com/hx1GAFW.jpg",Constant.SUPERCATEGORY_HEALTH),
     DERMATOLOGIST("Dermatologist","https://i.imgur.com/qV10Viu.jpg",Constant.SUPERCATEGORY_HEALTH),
     PEDIATRIST("Pediatrist","https://i.imgur.com/NwqANMe.jpg",Constant.SUPERCATEGORY_HEALTH),
     DENTIST("Dentist","https://i.imgur.com/nH0ii27.jpg",Constant.SUPERCATEGORY_HEALTH),
