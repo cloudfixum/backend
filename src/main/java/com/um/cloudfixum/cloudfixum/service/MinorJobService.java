@@ -61,7 +61,7 @@ public class MinorJobService extends GenericServiceImpl<MinorJob> {
     }
 
     public List<MinorJob> filterByTitleOrDescription(String query_title, String query_description) {
-        return minorJobRepository.findByTitleContainingOrDescriptionContaining(query_title,query_description);
+        return minorJobRepository.findByTitleContainingOrDescriptionContainingIgnoreCase(query_title,query_description);
     }
 
     @Override

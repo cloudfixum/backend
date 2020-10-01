@@ -21,4 +21,6 @@ public interface GenericService<T extends Serializable> {
     ResponseEntity<HttpStatus> delete(Long id);
 
     ResponseEntity<List<T>> findByPage(int page, int size, HttpServletRequest request);
+
+    ResponseEntity<List<T>> findByPageFiltered(int page, int size, HttpServletRequest request,List<T> filteredList);
 }
