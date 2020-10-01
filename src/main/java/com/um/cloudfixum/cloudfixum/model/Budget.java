@@ -5,6 +5,7 @@ import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -26,11 +27,15 @@ public class Budget implements Serializable, Identificable {
     @Size(min = 10, max = 256, message = Constant.DESCRIPTION_CHARACTERS_LONG)
     private String description;
 
-    @OneToOne
-    private ProviderUser requestUser;
+    @NotEmpty(message = Constant.EMAIL_NEEDED)
+    @Email(message = Constant.EMAIL_FORMAT)
+    private String user_email;
 
-    @OneToOne
-    private ProviderUser providerUser;
+    private Boolean budget_confirmation;
+
+    @Size(min = 10, max = 256, message = Constant.RESPONSE_CHARACTERS_LONG)
+    private String provider_response;
+
 
 
 

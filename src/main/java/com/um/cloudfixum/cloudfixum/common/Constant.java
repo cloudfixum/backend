@@ -50,6 +50,11 @@ public class Constant {
     public static final String PASSWORD_NEEDED = "Password required";
     public static final String PASSWORD_CHARACTERS = "Password requires a minimum of 8 characters";
 
+    //Model Budget
+    public static final String RESPONSE_CHARACTERS_LONG = "Response can't exceed 256 characters long";
+    public static final String MINOR_JOB_REQUESTED = "requestedMinorJob";
+
+
     //Enum
     public static final String SUPERCATEGORY_HOME = "Home";
     public static final String SUPERCATEGORY_HEALTH = "Health";
