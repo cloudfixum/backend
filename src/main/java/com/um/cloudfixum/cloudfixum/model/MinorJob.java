@@ -3,8 +3,10 @@ package com.um.cloudfixum.cloudfixum.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
@@ -46,6 +48,10 @@ public class MinorJob implements Serializable, Identificable {
 
     @ManyToOne
     private ProviderUser serviceProvider;
+
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Budget>budgetList;
 
     @Override
     public boolean equals(Object o) {
