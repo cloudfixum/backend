@@ -36,6 +36,11 @@ public class Budget implements Serializable, Identificable {
     @Size(min = 10, max = 256, message = Constant.RESPONSE_CHARACTERS_LONG)
     private String provider_response;
 
+    @NotEmpty(message = Constant.LOCATION_NEEDED)
+    @Size(min = 4, max = 50, message = Constant.LOCATION_CHARACTERS_LONG)
+    private String location;
+
+
 
 
 

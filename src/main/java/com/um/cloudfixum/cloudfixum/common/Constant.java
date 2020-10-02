@@ -53,6 +53,8 @@ public class Constant {
     //Model Budget
     public static final String RESPONSE_CHARACTERS_LONG = "Response can't exceed 256 characters long";
     public static final String MINOR_JOB_REQUESTED = "requestedMinorJob";
+    public static final String LOCATION_CHARACTERS_LONG = "Location can't exceed 50 characters long";
+
 
 
     //Enum
