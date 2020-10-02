@@ -103,8 +103,17 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
         boolean first = page == 0;
         boolean last = (page + 1) == paged_list.getTotalPages();
 
-        String linkPrevious = first ? "null" : request.getRequestURL() + "?page=" + (page - 1) + "&size=" + size;
-        String linkNext = last ? "null" : request.getRequestURL() + "?page=" + (page + 1) + "&size=" + size;
+        String[] query_split = request.getQueryString().split("(?:pag|siz)e=[0-99]|&");
+        String final_split = "";
+        for (String i:query_split) {
+            if (!i.equals(" ") && !i.equals("")){
+                final_split += "&" + i;
+            }
+        }
+
+        String linkPrevious = first ? "null" : request.getRequestURL() + "?page=" + (page - 1) + "&size=" + size + final_split;
+        String linkNext = last ? "null" : request.getRequestURL() + "?page=" + (page + 1) + "&size=" + size + final_split;
+
 
         responseHeaders.add("CurrentPage", String.valueOf(page));
         responseHeaders.add("Size", String.valueOf(size));

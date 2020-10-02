@@ -39,7 +39,6 @@ public class MinorJobController {
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<MinorJob>> filterService(@RequestParam(value = "text", required = false) String text, @RequestParam(value = "subquery", required = false) Category sub_query, @RequestParam(value = "superquery", required = false) String super_query, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, HttpServletRequest request){
-        System.out.println("PAGE: "+page+" SIZE: "+size);
         List<MinorJob> minorJobList = minorJobService.getRepository().findAll();
         minorJobList = (text != null) ? minorJobService.filterByTitleOrDescription(text,text) : minorJobList;
         minorJobList = (sub_query != null) ? minorJobList.stream().filter(e -> e.getCategory().equals(sub_query)).collect(Collectors.toList()) : minorJobList;
