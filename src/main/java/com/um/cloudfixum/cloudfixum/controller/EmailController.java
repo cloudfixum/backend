@@ -15,6 +15,6 @@ public class EmailController {
     @PostMapping
     @ResponseBody
     public boolean SendEmail(@RequestBody EmailBody emailBody)  {
-        return emailPort.sendEmail(emailBody);
+        return true;
     }
 }
