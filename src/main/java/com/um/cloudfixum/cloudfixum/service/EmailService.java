@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,13 +24,12 @@ public class EmailService implements EmailPort {
     private JavaMailSender sender;
 
     @Override
-    public boolean sendEmail(EmailBody emailBody) {
-        LOGGER.info("EmailBody: {}", emailBody.toString());
-        return sendEmailTool(emailBody.getContent(),emailBody.getEmail(), emailBody.getSubject());
-    }
-
-    private boolean sendEmailTool(String textMessage, String email,String subject) {
-        boolean send = false;
+    @Async
+    public void sendEmail(EmailBody emailBody) {
+        String textMessage = emailBody.getContent();
+        String email = emailBody.getEmail();
+        String subject = emailBody.getSubject();
+        Boolean send = Boolean.FALSE;
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         try {
@@ -37,7 +37,7 @@ public class EmailService implements EmailPort {
             helper.setText(textMessage, true);
             helper.setSubject(subject);
             sender.send(message);
-            send = true;
+            send = Boolean.TRUE;
             LOGGER.info("Mail enviado!");
         } catch (SMTPAddressFailedException e){
             LOGGER.error("Address is incorrect");
@@ -46,7 +46,7 @@ public class EmailService implements EmailPort {
         } catch (MessagingException e) {
             LOGGER.error("Hubo un error al enviar el mail: {}", e);
         }
-        return send;
+        //return send;
     }
 
 }
