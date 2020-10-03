@@ -40,6 +40,10 @@ public class Budget implements Serializable, Identificable {
     @Size(min = 4, max = 50, message = Constant.LOCATION_CHARACTERS_LONG)
     private String location;
 
+    @ManyToOne
+    private MinorJob minorJob;
+    
+
 
 
 
