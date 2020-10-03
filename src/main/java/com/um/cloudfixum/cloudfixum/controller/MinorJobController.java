@@ -33,7 +33,7 @@ public class MinorJobController {
     public ResponseEntity<List<MinorJob>> getAllService(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, HttpServletRequest request) {
 
         size = (size == null || size < 1) ? 9 : size;
-        return (page == null || page < 0) ? minorJobService.getAll() : minorJobService.findByPage(page, size, request);
+        return (page == null || page < 0) ? minorJobService.getAll() : minorJobService.findByPage(page, size, request, minorJobService.getRepository().findAll());
     }
 
     @GetMapping("/filter")
@@ -45,7 +45,7 @@ public class MinorJobController {
         minorJobList = (super_query != null) ? minorJobList.stream().filter(e -> e.getCategory().getSuperCategory().equalsIgnoreCase(super_query)).collect(Collectors.toList()) : minorJobList;
         if (minorJobList.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         size = (size == null || size < 1) ? 9 : size;
-        return (page == null || page < 0) ? new ResponseEntity<>(minorJobList,HttpStatus.OK) : minorJobService.findByPageFiltered(page, size, request,minorJobList);
+        return (page == null || page < 0) ? new ResponseEntity<>(minorJobList,HttpStatus.OK) : minorJobService.findByPage(page, size, request,minorJobList);
     }
     @GetMapping("/{id}")
     public ResponseEntity<MinorJob> getServiceByID(@PathVariable Long id) {

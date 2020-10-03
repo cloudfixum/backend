@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,43 +60,21 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
     }
 
     @Override
-    public ResponseEntity<List<T>> findByPage(int page, int size, HttpServletRequest request) {
+    public ResponseEntity<List<T>> findByPage(int page, int size, HttpServletRequest request, List<T> query_list) {
         HttpHeaders responseHeaders = new HttpHeaders();
-
-        boolean first = page == 0;
-        boolean last = (page + 1) == getRepository().findAll(PageRequest.of(page, size)).getTotalPages();
-
-        String linkPrevious = first ? "null" : request.getRequestURL() + "?page=" + (page - 1) + "&size=" + size;
-        String linkNext = last ? "null" : request.getRequestURL() + "?page=" + (page + 1) + "&size=" + size;
-
-        responseHeaders.add("CurrentPage", String.valueOf(page));
-        responseHeaders.add("Size", String.valueOf(size));
-        responseHeaders.add("TotalRecords", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalElements()));
-        responseHeaders.add("TotalPages", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalPages()));
-        responseHeaders.add("Prev",  linkPrevious);
-        responseHeaders.add("Next",  linkNext);
-
-        List<T> responseBody = getRepository().findAll(PageRequest.of(page, size, Sort.by("id").descending())).get().collect(Collectors.toList());
-
-        return new ResponseEntity<>(responseBody, responseHeaders, HttpStatus.OK);
-
-    }
-    @Override
-    public ResponseEntity<List<T>> findByPageFiltered(int page, int size, HttpServletRequest request, List<T> filteredList) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-
+        query_list.sort((a, b) -> (int) (b.getId() - a.getId()));
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
         int start_index = (int) pageable.getOffset();
-        int end_index = (int) (((pageable.getOffset() + pageable.getPageSize()) > filteredList.size()) ? filteredList.size() : (pageable.getOffset() + pageable.getPageSize()));
+        int end_index = (int) (((pageable.getOffset() + pageable.getPageSize()) > query_list.size()) ? query_list.size() : (pageable.getOffset() + pageable.getPageSize()));
 
-        List<T> filtered_sublist = new LinkedList<>();
+        List<T> query_sublist = new LinkedList<>();
 
         try {
-            filtered_sublist = filteredList.subList(start_index,end_index);
+            query_sublist = query_list.subList(start_index,end_index);
         }catch (IllegalArgumentException ignored){}
 
-        Page<T> paged_list = new PageImpl<>(filtered_sublist, pageable, filteredList.size());
+        Page<T> paged_list = new PageImpl<>(query_sublist, pageable, query_list.size());
 
         boolean first = page == 0;
         boolean last = (page + 1) == paged_list.getTotalPages();
@@ -124,7 +100,6 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
 
         List<T> responseBody = paged_list.get().collect(Collectors.toList());
         return new ResponseEntity<>(responseBody, responseHeaders, HttpStatus.OK);
-
     }
 
     public abstract JpaRepository<T, Long> getRepository();
