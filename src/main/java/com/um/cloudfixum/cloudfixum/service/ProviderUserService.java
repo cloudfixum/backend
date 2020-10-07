@@ -1,16 +1,21 @@
 package com.um.cloudfixum.cloudfixum.service;
 
 import com.um.cloudfixum.cloudfixum.common.GenericServiceImpl;
+import com.um.cloudfixum.cloudfixum.model.Budget;
 import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.repository.ProviderUserRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
@@ -29,6 +34,19 @@ public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
 
         return new ResponseEntity<>(userJobs, HttpStatus.OK);
 
+    }
+
+    public ResponseEntity<List<Budget>> getBudgets(Authentication auth) {
+        ProviderUser user = providerUserRepository.findByEmail(auth.getName());
+        List<Budget> budgets = new ArrayList<>();
+
+        for (MinorJob job : user.getServiceList()) {
+            budgets.addAll(job.getBudgetList());
+        }
+
+        budgets.sort((b1, b2) -> b2.getId().compareTo(b1.getId()));
+
+        return budgets.size() == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(budgets, HttpStatus.OK);
     }
 
     @Override
