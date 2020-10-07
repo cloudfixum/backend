@@ -28,14 +28,14 @@ public class EmailService implements EmailPort {
     @Autowired
     private JavaMailSender sender;
 
-    public EmailBody createEmail(String content, String email, String subject){
-        return new EmailBody(email,content,subject);
+    public EmailBody createEmail(String content, String email, String subject) {
+        return new EmailBody(email, content, subject);
     }
 
     @Override
     @Async
     public void sendEmail(String content, String email, String subject) {
-        EmailBody emailBody = createEmail(content,email, subject);
+        EmailBody emailBody = createEmail(content, email, subject);
         email = emailBody.getEmail();
         content = emailBody.getContent();
         subject = emailBody.getSubject();
@@ -58,19 +58,21 @@ public class EmailService implements EmailPort {
             LOGGER.error("Address is incorrect");
         } catch (SendFailedException e) {
             LOGGER.error("Mail dont send");
+        } catch (AddressException e) {
+            LOGGER.error("Ilegal Character");
         } catch (MessagingException e) {
             LOGGER.error("Error with send mail: {}", e);
         } catch (MailSendException e) {
             LOGGER.error("Dont send email with: {}", e);
         }
     }
+        public void addMailAttachments (List < String > attachmentList, MimeMessageHelper helper) throws
+        MessagingException {
+            for (String attachment_path : attachmentList) {
+                FileSystemResource file = new FileSystemResource(attachment_path);
+                helper.addAttachment(file.getFilename(), file);
+            }
 
-    public void addMailAttachments(List<String> attachmentList, MimeMessageHelper helper) throws MessagingException {
-        for (String attachment_path : attachmentList) {
-            FileSystemResource file = new FileSystemResource(attachment_path);
-            helper.addAttachment(file.getFilename(), file);
         }
 
     }
-
-}
