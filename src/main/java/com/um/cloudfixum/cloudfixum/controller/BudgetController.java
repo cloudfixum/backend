@@ -31,7 +31,7 @@ public class BudgetController {
 
     @PostMapping
     public ResponseEntity<Budget> addBudget(@Valid @RequestBody Budget budget){
-        emailService.sendEmail(minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), "<h1>PRESUPUESTO!"+budget.getDescription()+"</h1>", "Solicitud de presupuesto:");
+        emailService.sendEmail("PRESUPUESTO: "+budget.getDescription(), minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), "Solicitud de presupuesto:");
         return  budgetService.create(budget);
     }
 
@@ -41,7 +41,7 @@ public class BudgetController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         budget.setBudget_confirmation(Boolean.TRUE);
-        emailService.sendEmail("<h1>PRESUPUESTO!"+budget.getProvider_response()+"</h1>", budget.getUser_email(), "No te puedo atender así bro.");
+        emailService.sendEmail("PRESUPUESTO!"+budget.getProvider_response(), budget.getUser_email(), "No te puedo atender así bro.");
         return  budgetService.update(budget);
     }
 

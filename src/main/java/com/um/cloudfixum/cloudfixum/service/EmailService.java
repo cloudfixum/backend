@@ -35,9 +35,14 @@ public class EmailService implements EmailPort {
     @Override
     @Async
     public void sendEmail(String content, String email, String subject) {
+        EmailBody emailBody = createEmail(content,email, subject);
+        email = emailBody.getEmail();
+        content = emailBody.getContent();
+        subject = emailBody.getSubject();
         try {
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            System.out.println(email);
             helper.setTo(email);
             helper.setText(content, true);
             helper.setSubject(subject);
@@ -53,9 +58,6 @@ public class EmailService implements EmailPort {
             LOGGER.error("Address is incorrect");
         } catch (SendFailedException e) {
             LOGGER.error("Mail dont send");
-        } catch (AddressException e) {
-            LOGGER.error("Ilegal Character");
-            System.out.println(e);
         } catch (MessagingException e) {
             LOGGER.error("Error with send mail: {}", e);
         } catch (MailSendException e) {
