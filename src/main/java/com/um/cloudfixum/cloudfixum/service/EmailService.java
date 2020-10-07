@@ -2,6 +2,7 @@ package com.um.cloudfixum.cloudfixum.service;
 
 import com.sun.mail.smtp.SMTPAddressFailedException;
 import com.um.cloudfixum.cloudfixum.email.EmailBody;
+import com.um.cloudfixum.cloudfixum.email.EmailHtml;
 import com.um.cloudfixum.cloudfixum.email.EmailPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,8 @@ public class EmailService implements EmailPort {
 
     @Autowired
     private JavaMailSender sender;
+    @Autowired
+    private EmailHtml emailHtml;
 
     public EmailBody createEmail(String content, String email, String subject) {
         return new EmailBody(email, content, subject);
@@ -44,7 +47,7 @@ public class EmailService implements EmailPort {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             System.out.println(email);
             helper.setTo(email);
-            helper.setText(content, true);
+            helper.setText(emailHtml.generateMailHtml(content), true);
             helper.setSubject(subject);
             List<String> attachment = new LinkedList<>();
             //attachment.add("/home/santiagoriera/Escritorio/water-pipe-sewage-plumbing-plumber-pollution-drain-old-pipeline.jpg");

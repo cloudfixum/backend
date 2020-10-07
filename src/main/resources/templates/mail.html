@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td style="padding: 10px 0 30px 0;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" width="600"
+                   style="border: 1px solid #cccccc; border-collapse: collapse;">
+                <tr>
+                    <td align="center" bgcolor="#049ee4"
+                        style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
+                        <h1 style="color:white; ">
+                            <img src="https://i.imgur.com/0T0mIYM.png"
+                                 class="img-mail" style="width:100px; height: 100px; position:relative;"/>
+                            Bienvenidos a CloudFixum</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="ffffff" style="padding: 40px 30px 40px 30px;">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td style=" font-family: Arial, sans-serif; font-size: 24px;">
+                                    <b>¡Presupuesto enviado!</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
+                                    <h2 th:text="${mailtext}"></h2>
+                                    <p> Su presupuesto ha sido enviado con exito al provedor, el enviara la respuesta del mismo
+                                        por este medio.
+                                    </p>
+                                    <p> Saludos cordiales. CloudFixum™ </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 30px 30px 30px 30px; background-color: rgba(29,22,30,0.8)">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;"
+                                    width="75%">
+                                    Copyright © 2013-2020 CloudFixum S.L. All rights reserved.<br/>
+                                    <a href="#" style="color: #ffffff;">
+                                </td>
+                                <td align="right" width="25%">
+                                    <table border="0" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">
+                                                <a href="http://www.twitter.com/" style="color: #ffffff;">
+                                                    <img src="https://images.vexels.com/media/users/3/137419/isolated/preview/b1a3fab214230557053ed1c4bf17b46c-icono-de-twitter-logo-by-vexels.png"
+                                                         alt="Twitter" width="55" height="55"
+                                                         style="display: block;" border="0"/>
+                                                </a>
+                                            </td>
+                                            <td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
+                                            <td style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">
+                                                <a href="http://www.facebook.com/" style="color: #ffffff;">
+                                                    <img src="https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-icono-de-facebook-logo-by-vexels.png"
+                                                         alt="Facebook" width="55" height="55"
+                                                         style="display: block;" border="0"/>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
