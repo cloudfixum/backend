@@ -1,8 +1,6 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
-import com.um.cloudfixum.cloudfixum.email.EmailBody;
 import com.um.cloudfixum.cloudfixum.model.Budget;
-import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.service.BudgetService;
 import com.um.cloudfixum.cloudfixum.service.EmailService;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
@@ -33,11 +31,7 @@ public class BudgetController {
 
     @PostMapping
     public ResponseEntity<Budget> addBudget(@Valid @RequestBody Budget budget){
-        EmailBody emailBody = new EmailBody();
-        emailBody.setEmail(minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail());
-        emailBody.setContent("<h1>PRESUPUESTO!"+budget.getDescription()+"</h1>");
-        emailBody.setSubject("Solicitud de presupuesto:");
-        emailService.sendEmail(emailBody);
+        emailService.sendEmail(minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), "<h1>PRESUPUESTO!"+budget.getDescription()+"</h1>", "Solicitud de presupuesto:");
         return  budgetService.create(budget);
     }
 
@@ -47,11 +41,7 @@ public class BudgetController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         budget.setBudget_confirmation(Boolean.TRUE);
-        EmailBody emailBody = new EmailBody();
-        emailBody.setEmail(budget.getUser_email());
-        emailBody.setContent("<h1>PRESUPUESTO!"+budget.getProvider_response()+"</h1>");
-        emailBody.setSubject("No te puedo atender así bro.");
-        emailService.sendEmail(emailBody);
+        emailService.sendEmail("<h1>PRESUPUESTO!"+budget.getProvider_response()+"</h1>", budget.getUser_email(), "No te puedo atender así bro.");
         return  budgetService.update(budget);
     }
 

@@ -2,5 +2,5 @@ package com.um.cloudfixum.cloudfixum.email;
 
 public interface EmailPort {
 
-    void sendEmail(EmailBody emailBody);
+    void sendEmail(String content, String email, String subject);
 }

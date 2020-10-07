@@ -1,10 +1,5 @@
 package com.um.cloudfixum.cloudfixum.service;
 
-import javax.mail.MessagingException;
-import javax.mail.SendFailedException;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.MimeMessage;
-
 import com.sun.mail.smtp.SMTPAddressFailedException;
 import com.um.cloudfixum.cloudfixum.email.EmailBody;
 import com.um.cloudfixum.cloudfixum.email.EmailPort;
@@ -18,6 +13,10 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.MimeMessage;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,45 +28,45 @@ public class EmailService implements EmailPort {
     @Autowired
     private JavaMailSender sender;
 
+    public EmailBody createEmail(String content, String email, String subject){
+        return new EmailBody(email,content,subject);
+    }
+
     @Override
     @Async
-    public void sendEmail(EmailBody emailBody) {
-        String textMessage = emailBody.getContent();
-        String email = emailBody.getEmail();
-        String subject = emailBody.getSubject();
-        Boolean send = Boolean.FALSE;
+    public void sendEmail(String content, String email, String subject) {
         try {
             MimeMessage message = sender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message,true);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(email);
-            helper.setText(textMessage, true);
+            helper.setText(content, true);
             helper.setSubject(subject);
             List<String> attachment = new LinkedList<>();
             //attachment.add("/home/santiagoriera/Escritorio/water-pipe-sewage-plumbing-plumber-pollution-drain-old-pipeline.jpg");
-            attachment.add("/home/santiagoriera/Escritorio/example1.jpg");
-            if (!attachment.isEmpty()){
-                addMailAttachments(attachment,helper);
+            //attachment.add("/home/santiagoriera/Escritorio/example1.jpg");
+            if (!attachment.isEmpty()) {
+                addMailAttachments(attachment, helper);
             }
             sender.send(message);
-            send = Boolean.TRUE;
             LOGGER.info("Mail enviado!");
-        } catch (SMTPAddressFailedException e){
+        } catch (SMTPAddressFailedException e) {
             LOGGER.error("Address is incorrect");
-        } catch (SendFailedException e){
+        } catch (SendFailedException e) {
             LOGGER.error("Mail dont send");
-        } catch (AddressException e ){
+        } catch (AddressException e) {
             LOGGER.error("Ilegal Character");
-        }catch (MessagingException e) {
+            System.out.println(e);
+        } catch (MessagingException e) {
             LOGGER.error("Error with send mail: {}", e);
-        } catch (MailSendException e){
-        LOGGER.error("Dont send email with: {}", e);
+        } catch (MailSendException e) {
+            LOGGER.error("Dont send email with: {}", e);
+        }
     }
-        //return send;
-    }
+
     public void addMailAttachments(List<String> attachmentList, MimeMessageHelper helper) throws MessagingException {
-        for (String attachment_path: attachmentList) {
+        for (String attachment_path : attachmentList) {
             FileSystemResource file = new FileSystemResource(attachment_path);
-            helper.addAttachment(file.getFilename(),file);
+            helper.addAttachment(file.getFilename(), file);
         }
 
     }
