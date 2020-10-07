@@ -2,6 +2,7 @@ package com.um.cloudfixum.cloudfixum.service;
 
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.MimeMessage;
 
 import com.sun.mail.smtp.SMTPAddressFailedException;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -53,9 +55,13 @@ public class EmailService implements EmailPort {
             LOGGER.error("Address is incorrect");
         } catch (SendFailedException e){
             LOGGER.error("Mail dont send");
-        } catch (MessagingException e) {
-            LOGGER.error("Hubo un error al enviar el mail: {}", e);
-        }
+        } catch (AddressException e ){
+            LOGGER.error("Ilegal Character");
+        }catch (MessagingException e) {
+            LOGGER.error("Error with send mail: {}", e);
+        } catch (MailSendException e){
+        LOGGER.error("Dont send email with: {}", e);
+    }
         //return send;
     }
     public void addMailAttachments(List<String> attachmentList, MimeMessageHelper helper) throws MessagingException {
