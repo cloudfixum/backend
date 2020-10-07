@@ -29,7 +29,7 @@ public class Budget implements Serializable, Identificable {
 
     @NotEmpty(message = Constant.EMAIL_NEEDED)
     @Email(message = Constant.EMAIL_FORMAT)
-    private String user_email;
+    private String userEmail;
 
     private Boolean budget_confirmation;
 

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +37,11 @@ public class BudgetService extends GenericServiceImpl<Budget> {
 
         budget.setMinorJob(minorJob.get());
         return super.create(budget);
+    }
+
+    public ResponseEntity<List<Budget>> getBudgetsbyCommonUserMail(String email){
+        List<Budget> user_budgets = budgetRepository.findByuserEmail(email);
+        return user_budgets.size() == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(user_budgets, HttpStatus.OK);
     }
 
 }

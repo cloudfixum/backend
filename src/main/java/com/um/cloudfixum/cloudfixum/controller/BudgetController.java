@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,6 +30,9 @@ public class BudgetController {
     @GetMapping("/{id}")
     public ResponseEntity<Budget> getBudgetByID(@PathVariable Long id){ return budgetService.getById(id);}
 
+    @GetMapping("/filter")
+    public  ResponseEntity<List<Budget>> getBudgetsByUserEmail(@RequestParam(value = "email", required = true) String email){return budgetService.getBudgetsbyCommonUserMail(email);}
+
     @PostMapping
     public ResponseEntity<Budget> addBudget(@Valid @RequestBody Budget budget){
         emailService.sendEmail("PRESUPUESTO: "+budget.getDescription(), minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), "Solicitud de presupuesto:");
@@ -41,7 +45,7 @@ public class BudgetController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         budget.setBudget_confirmation(Boolean.TRUE);
-        emailService.sendEmail("PRESUPUESTO!"+budget.getProvider_response(), budget.getUser_email(), "No te puedo atender así bro.");
+        emailService.sendEmail("PRESUPUESTO!"+budget.getProvider_response(), budget.getUserEmail(), "No te puedo atender así bro.");
         return  budgetService.update(budget);
     }
 
