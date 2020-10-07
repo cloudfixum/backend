@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -43,6 +44,11 @@ public class Budget implements Serializable, Identificable {
     private Long budget_price;
 
     private String image_url_encoded;//BASE64
+
+    @NotNull(message = Constant.MESSAGE_BUDGETSTATUS)
+    @Enumerated(EnumType.STRING)
+    private BudgetStatus budgetStatus;
+
 
     @ManyToOne
     private MinorJob minorJob;

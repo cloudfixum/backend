@@ -57,12 +57,15 @@ public class Constant {
 
 
 
-    //Enum
+    //Enum Category
     public static final String SUPERCATEGORY_HOME = "Home";
     public static final String SUPERCATEGORY_HEALTH = "Health";
     public static final String SUPERCATEGORY_OTHER = "Other";
     public static final String SUPERCATEGORY_BEAUTY = "Beauty";
     public static final String SUPERCATEGORY_VEHICLE = "Vehicle";
     public static final String SUPERCATEGORY_WELLNESS = "Wellness";
+
+    //Enum Budget Status
+    public static final String MESSAGE_BUDGETSTATUS = "Budget Status can't be null";
 
 }
