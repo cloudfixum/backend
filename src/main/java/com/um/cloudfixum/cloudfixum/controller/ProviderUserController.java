@@ -1,5 +1,6 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
+import com.um.cloudfixum.cloudfixum.model.Budget;
 import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.service.ProviderUserService;
@@ -38,6 +39,14 @@ public class ProviderUserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<MinorJob>> getJobsByUserID(@PathVariable Long id) {
         return providerUserService.getJobs(id);
+    }
+
+    @GetMapping("/budgets")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<Budget>> getBudgetsByServiceProvider(Authentication authentication) {
+        if (authentication == null) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        return providerUserService.getBudgets(authentication);
     }
 
     @DeleteMapping("/{id}")
