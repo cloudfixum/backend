@@ -2,6 +2,7 @@ package com.um.cloudfixum.cloudfixum.service;
 
 import com.um.cloudfixum.cloudfixum.common.GenericServiceImpl;
 import com.um.cloudfixum.cloudfixum.model.Budget;
+import com.um.cloudfixum.cloudfixum.model.BudgetStatus;
 import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.repository.BudgetRepository;
 import com.um.cloudfixum.cloudfixum.repository.MinorJobRepository;
@@ -18,10 +19,12 @@ public class BudgetService extends GenericServiceImpl<Budget> {
 
     private final BudgetRepository budgetRepository;
     private final MinorJobRepository minorJobRepository;
+    private final EmailService emailService;
 
-    public BudgetService(BudgetRepository budgetRepository, MinorJobRepository minorJobRepository) {
+    public BudgetService(BudgetRepository budgetRepository, MinorJobRepository minorJobRepository, EmailService emailService) {
         this.budgetRepository = budgetRepository;
         this.minorJobRepository = minorJobRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -43,5 +46,18 @@ public class BudgetService extends GenericServiceImpl<Budget> {
         List<Budget> user_budgets = budgetRepository.findByuserEmail(email);
         return user_budgets.size() == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(user_budgets, HttpStatus.OK);
     }
-
+    public ResponseEntity<Budget> requestBudget(Budget budget){
+        String email_content = "";
+        if (budget.getImage_url_encoded() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST); //Ver si es opcional.
+        if (budget.getBudgetStatus().equals(BudgetStatus.BUDGETACCEPTED) || budget.getBudgetStatus().equals(BudgetStatus.BUDGETREJECTED)){
+            email_content = "Your budget of your service called "+minorJobRepository.findById(budget.getMinorJob().getId()).get().getTitle()+" has been "+budget.getBudgetStatus().getStatus()+" by the user";
+            emailService.sendEmail(email_content, minorJobRepository.findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), "Budget Request");
+            return update(budget);
+        }else {
+            budget.setBudgetStatus(BudgetStatus.BUDGETONHOLD);
+            email_content = "You have a budget request of your service called "+minorJobRepository.findById(budget.getMinorJob().getId()).get().getTitle();
+            emailService.sendEmail(email_content, minorJobRepository.findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), "Budget Request");
+            return create(budget);
+        }
+    }
 }

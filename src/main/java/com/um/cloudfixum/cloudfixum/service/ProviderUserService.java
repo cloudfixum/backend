@@ -2,8 +2,11 @@ package com.um.cloudfixum.cloudfixum.service;
 
 import com.um.cloudfixum.cloudfixum.common.GenericServiceImpl;
 import com.um.cloudfixum.cloudfixum.model.Budget;
+import com.um.cloudfixum.cloudfixum.model.BudgetStatus;
 import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.model.ProviderUser;
+import com.um.cloudfixum.cloudfixum.repository.BudgetRepository;
+import com.um.cloudfixum.cloudfixum.repository.MinorJobRepository;
 import com.um.cloudfixum.cloudfixum.repository.ProviderUserRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
@@ -13,19 +16,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
 
     private final ProviderUserRepository providerUserRepository;
+    private final BudgetRepository budgetRepository;
+    private final MinorJobRepository minorJobRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
-    public ProviderUserService(ProviderUserRepository providerUserRepository, PasswordEncoder passwordEncoder) {
+    public ProviderUserService(ProviderUserRepository providerUserRepository, BudgetRepository budgetRepository, MinorJobRepository minorJobRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.providerUserRepository = providerUserRepository;
+        this.budgetRepository = budgetRepository;
+        this.minorJobRepository = minorJobRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     public ResponseEntity<List<MinorJob>> getJobs(Long id) {
@@ -57,6 +64,16 @@ public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         getRepository().save(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<Budget> responseBudget(Budget budget){
+        budget.setBudgetStatus(BudgetStatus.RESPONSEDBUDGET);
+        if (budget.getProvider_response() == null || budget.getBudget_price() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        emailService.sendEmail("You have an answer to the budget requested from the service :"+minorJobRepository.findById(budget.getMinorJob().getId()).get().getTitle(), budget.getUserEmail(), "Budget Response");
+        if (!budgetRepository.findById(budget.getId()).isPresent())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        budgetRepository.save(budget);
+        return new ResponseEntity<>(budget,HttpStatus.OK);
     }
 
     @Override

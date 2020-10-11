@@ -3,6 +3,7 @@ package com.um.cloudfixum.cloudfixum.controller;
 import com.um.cloudfixum.cloudfixum.model.Budget;
 import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.model.ProviderUser;
+import com.um.cloudfixum.cloudfixum.service.MinorJobService;
 import com.um.cloudfixum.cloudfixum.service.ProviderUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,11 @@ import java.util.Optional;
 @RequestMapping("/api/user")
 public class ProviderUserController {
     private final ProviderUserService providerUserService;
+    private final MinorJobService minorJobService;
 
-    public ProviderUserController(ProviderUserService providerUserService) {
+    public ProviderUserController(ProviderUserService providerUserService, MinorJobService minorJobService) {
         this.providerUserService = providerUserService;
+        this.minorJobService = minorJobService;
     }
 
     @PostMapping
@@ -47,6 +50,12 @@ public class ProviderUserController {
         if (authentication == null) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         return providerUserService.getBudgets(authentication);
+    }
+    @PostMapping("respbudget")
+    public ResponseEntity<Budget> responseBudget(Authentication authentication, @Valid @RequestBody Budget budget){
+        if (authentication == null || !authentication.isAuthenticated() || !minorJobService.getServiceProviderByToken(authentication).getEmail().equals(minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail()))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        return providerUserService.responseBudget(budget);
     }
 
     @DeleteMapping("/{id}")

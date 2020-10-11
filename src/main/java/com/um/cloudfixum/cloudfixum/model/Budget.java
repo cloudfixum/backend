@@ -32,8 +32,6 @@ public class Budget implements Serializable, Identificable {
     @Email(message = Constant.EMAIL_FORMAT)
     private String userEmail;
 
-    private Boolean budget_confirmation;
-
     @Size(min = 10, max = 256, message = Constant.RESPONSE_CHARACTERS_LONG)
     private String provider_response;
 

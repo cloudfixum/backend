@@ -1,6 +1,7 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.model.Budget;
+import com.um.cloudfixum.cloudfixum.model.BudgetStatus;
 import com.um.cloudfixum.cloudfixum.service.BudgetService;
 import com.um.cloudfixum.cloudfixum.service.EmailService;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
@@ -35,7 +36,6 @@ public class BudgetController {
 
     @PostMapping
     public ResponseEntity<Budget> addBudget(@Valid @RequestBody Budget budget){
-        emailService.sendEmail("PRESUPUESTO: "+budget.getDescription(), minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), "Solicitud de presupuesto:");
         return  budgetService.create(budget);
     }
 
@@ -44,11 +44,13 @@ public class BudgetController {
         if (authentication == null || !authentication.isAuthenticated() || !minorJobService.getServiceProviderByToken(authentication).getEmail().equals(minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail()))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
-        budget.setBudget_confirmation(Boolean.TRUE);
-        emailService.sendEmail("PRESUPUESTO!"+budget.getProvider_response(), budget.getUserEmail(), "No te puedo atender así bro.");
         return  budgetService.update(budget);
     }
 
+    @PostMapping("/manage")
+    public ResponseEntity<Budget> controlBudget(@Valid @RequestBody Budget budget){
+        return budgetService.requestBudget(budget);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteBudget(@PathVariable Long id){

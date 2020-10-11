@@ -20,9 +20,7 @@ public class EmailHtml {
         variables.put("mailtext", text);
 
         final String templateFileName = "mail"; //Name of the template file without extension
-        String output = this.templateEngine.process(templateFileName, new Context(Locale.getDefault(), variables));
-        System.out.println(output);
-        return output;
+        return this.templateEngine.process(templateFileName, new Context(Locale.getDefault(), variables));
 
     }
 }
