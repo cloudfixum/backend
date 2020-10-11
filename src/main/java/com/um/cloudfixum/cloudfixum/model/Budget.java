@@ -41,6 +41,8 @@ public class Budget implements Serializable, Identificable {
 
     private Long budget_price;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     private String image_url_encoded;//BASE64
 
     @NotNull(message = Constant.MESSAGE_BUDGETSTATUS)
