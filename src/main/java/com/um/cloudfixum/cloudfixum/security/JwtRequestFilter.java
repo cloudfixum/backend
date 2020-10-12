@@ -1,6 +1,6 @@
 package com.um.cloudfixum.cloudfixum.security;
 
-import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7);
             try {
                 username = jwtUtil.extractUsername(jwt);
-            } catch (SignatureException e) {
+            } catch (JwtException e) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             }
         }
