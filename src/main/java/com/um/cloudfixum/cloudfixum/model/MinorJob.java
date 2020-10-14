@@ -49,7 +49,7 @@ public class MinorJob implements Serializable, Identificable {
     @ManyToOne
     private ProviderUser serviceProvider;
 
-    @OneToMany(mappedBy = Constant.MINOR_JOB_REQUESTED,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "minorJob", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Budget>budgetList;
 
