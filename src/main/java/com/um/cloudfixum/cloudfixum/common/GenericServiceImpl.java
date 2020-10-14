@@ -1,8 +1,6 @@
 package com.um.cloudfixum.cloudfixum.common;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,8 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,26 +60,46 @@ public abstract class GenericServiceImpl<T extends Identificable & Serializable>
     }
 
     @Override
-    public ResponseEntity<List<T>> findByPage(int page, int size, HttpServletRequest request) {
+    public ResponseEntity<List<T>> findByPage(int page, int size, HttpServletRequest request, List<T> query_list) {
         HttpHeaders responseHeaders = new HttpHeaders();
+        query_list.sort((a, b) -> (int) (b.getId() - a.getId()));
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+
+        int start_index = (int) pageable.getOffset();
+        int end_index = (int) (((pageable.getOffset() + pageable.getPageSize()) > query_list.size()) ? query_list.size() : (pageable.getOffset() + pageable.getPageSize()));
+
+        List<T> query_sublist = new LinkedList<>();
+
+        try {
+            query_sublist = query_list.subList(start_index,end_index);
+        }catch (IllegalArgumentException ignored){}
+
+        Page<T> paged_list = new PageImpl<>(query_sublist, pageable, query_list.size());
 
         boolean first = page == 0;
-        boolean last = (page + 1) == getRepository().findAll(PageRequest.of(page, size)).getTotalPages();
+        boolean last = (page + 1) == paged_list.getTotalPages();
 
-        String linkPrevious = first ? "null" : request.getRequestURL() + "?page=" + (page - 1) + "&size=" + size;
-        String linkNext = last ? "null" : request.getRequestURL() + "?page=" + (page + 1) + "&size=" + size;
+        String[] query_split = request.getQueryString().split("(?:pag|siz)e=[0-99]|&");
+        String final_split = "";
+        for (String i:query_split) {
+            if (!i.equals(" ") && !i.equals("")){
+                final_split += "&" + i;
+            }
+        }
+
+        String linkPrevious = first ? "null" : request.getRequestURL() + "?page=" + (page - 1) + "&size=" + size + final_split;
+        String linkNext = last ? "null" : request.getRequestURL() + "?page=" + (page + 1) + "&size=" + size + final_split;
+
 
         responseHeaders.add("CurrentPage", String.valueOf(page));
         responseHeaders.add("Size", String.valueOf(size));
-        responseHeaders.add("TotalRecords", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalElements()));
-        responseHeaders.add("TotalPages", String.valueOf(getRepository().findAll(PageRequest.of(page, size)).getTotalPages()));
+        responseHeaders.add("TotalRecords", String.valueOf(paged_list.getTotalElements()));
+        responseHeaders.add("TotalPages", String.valueOf(paged_list.getTotalPages()));
         responseHeaders.add("Prev",  linkPrevious);
         responseHeaders.add("Next",  linkNext);
 
-        List<T> responseBody = getRepository().findAll(PageRequest.of(page, size, Sort.by("id").descending())).get().collect(Collectors.toList());
-
+        List<T> responseBody = paged_list.get().collect(Collectors.toList());
         return new ResponseEntity<>(responseBody, responseHeaders, HttpStatus.OK);
-
     }
 
     public abstract JpaRepository<T, Long> getRepository();

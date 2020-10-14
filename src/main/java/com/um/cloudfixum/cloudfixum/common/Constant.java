@@ -50,12 +50,33 @@ public class Constant {
     public static final String PASSWORD_NEEDED = "Password required";
     public static final String PASSWORD_CHARACTERS = "Password requires a minimum of 8 characters";
 
-    //Enum
+    //Model Budget
+    public static final String RESPONSE_CHARACTERS_LONG = "Response can't exceed 256 characters long";
+    public static final String MINOR_JOB_REQUESTED = "minorJob";
+    public static final String LOCATION_CHARACTERS_LONG = "Location can't exceed 50 characters long";
+
+
+
+    //Enum Category
     public static final String SUPERCATEGORY_HOME = "Home";
     public static final String SUPERCATEGORY_HEALTH = "Health";
     public static final String SUPERCATEGORY_OTHER = "Other";
     public static final String SUPERCATEGORY_BEAUTY = "Beauty";
     public static final String SUPERCATEGORY_VEHICLE = "Vehicle";
     public static final String SUPERCATEGORY_WELLNESS = "Wellness";
+
+    //Enum Budget Status
+    public static final String MESSAGE_BUDGETSTATUS = "Budget Status can't be null";
+
+    //ProviderUserService
+    public static final String RESPONSE_TO_THE_BUDGET = "You have an answer to the budget requested from the service: ";
+    public static final String BUDGET_RESPONSE = "Budget Response";
+
+    //BudgetService
+    public static final String CALLED_SERVICE = "Your budget of your service called ";
+    public static final String BUDGET_REQUEST = "Budget Request";
+    public static final String HAS_BEEN = " has been ";
+    public static final String BY_THE_USER = " by the user";
+    public static final String HAS_A_BUDGET_REQUEST = "You have a budget request of your service called ";
 
 }
