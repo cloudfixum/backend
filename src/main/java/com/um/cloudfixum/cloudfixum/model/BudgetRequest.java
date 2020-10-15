@@ -1,6 +1,14 @@
 package com.um.cloudfixum.cloudfixum.model;
 
-public class BudgetRequest {
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+
+@Getter
+@Setter
+
+public class BudgetRequest implements Serializable {
 
     private String user_email;
 
