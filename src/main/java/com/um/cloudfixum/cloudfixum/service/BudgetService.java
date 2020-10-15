@@ -49,13 +49,13 @@ public class BudgetService extends GenericServiceImpl<Budget> {
     }
     public ResponseEntity<Budget> requestBudget(Budget budget){
         String email_content = "";
-        if (budget.getImage_url_encoded() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST); //Ver si es opcional.
-        if (budget.getBudgetStatus().equals(BudgetStatus.BUDGETACCEPTED) || budget.getBudgetStatus().equals(BudgetStatus.BUDGETREJECTED)){
+        if (budget.getImageHash() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST); //Ver si es opcional.
+        if (budget.getBudgetStatus().equals(BudgetStatus.BUDGET_ACCEPTED) || budget.getBudgetStatus().equals(BudgetStatus.BUDGET_REJECTED)){
             email_content = Constant.CALLED_SERVICE+minorJobRepository.findById(budget.getMinorJob().getId()).get().getTitle()+Constant.HAS_BEEN+budget.getBudgetStatus().getStatus()+Constant.BY_THE_USER;
             emailService.sendEmail(email_content, minorJobRepository.findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), Constant.BUDGET_REQUEST);
             return update(budget);
         }else {
-            budget.setBudgetStatus(BudgetStatus.BUDGETONHOLD);
+            budget.setBudgetStatus(BudgetStatus.BUDGET_ON_HOLD);
             email_content = Constant.HAS_A_BUDGET_REQUEST+minorJobRepository.findById(budget.getMinorJob().getId()).get().getTitle();
             emailService.sendEmail(email_content, minorJobRepository.findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), Constant.BUDGET_REQUEST);
             return create(budget);

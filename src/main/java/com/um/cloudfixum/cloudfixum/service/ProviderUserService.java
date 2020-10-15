@@ -68,8 +68,8 @@ public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
     }
 
     public ResponseEntity<Budget> responseBudget(Budget budget){
-        budget.setBudgetStatus(BudgetStatus.RESPONSEDBUDGET);
-        if (budget.getProvider_response() == null || budget.getBudget_price() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        budget.setBudgetStatus(BudgetStatus.RESPONSED_BUDGET);
+        if (budget.getProviderResponse() == null || budget.getBudgetPrice() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         emailService.sendEmail(Constant.RESPONSE_TO_THE_BUDGET+minorJobRepository.findById(budget.getMinorJob().getId()).get().getTitle(), budget.getUserEmail(), Constant.BUDGET_RESPONSE);
         if (!budgetRepository.findById(budget.getId()).isPresent())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
