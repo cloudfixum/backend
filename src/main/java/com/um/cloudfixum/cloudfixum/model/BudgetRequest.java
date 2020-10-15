@@ -10,13 +10,13 @@ import java.io.Serializable;
 
 public class BudgetRequest implements Serializable {
 
-    private String user_email;
+    private String userEmail;
 
-    private String image_url_encoded;
+    private String imageHash;
 
     private String description;
 
     private String location;
 
-    private Long minor_job;
+    private Long minorJobId;
 }

@@ -12,7 +12,7 @@ public class BudgetResponse implements Serializable {
 
     private Long price;
 
-    private String provider_response;
+    private String providerResponse;
 
-    private Long budget_id;
+    private Long budgetId;
 }

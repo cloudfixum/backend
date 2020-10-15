@@ -7,10 +7,10 @@ import lombok.ToString;
 @ToString
 public enum BudgetStatus {
 
-    RESPONSEDBUDGET("Responsed Budget"), //Request Budget -anterior.ver
-    BUDGETONHOLD("Budget On Hold"),
-    BUDGETACCEPTED("Accepted"),
-    BUDGETREJECTED("Rejected");
+    BUDGET_ON_HOLD("Budget On Hold"),
+    RESPONSED_BUDGET("Responsed Budget"), //Request Budget -anterior.ver
+    BUDGET_ACCEPTED("Accepted"),
+    BUDGET_REJECTED("Rejected");
 
     private String status;
 
