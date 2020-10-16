@@ -2,6 +2,7 @@ package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.model.Budget;
 import com.um.cloudfixum.cloudfixum.model.BudgetRequest;
+import com.um.cloudfixum.cloudfixum.model.BudgetResponse;
 import com.um.cloudfixum.cloudfixum.service.BudgetService;
 import com.um.cloudfixum.cloudfixum.service.EmailService;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
@@ -48,10 +49,14 @@ public class BudgetController {
         return  budgetService.update(budget);
     }
 
-    @PostMapping("/manage")
-    public ResponseEntity<Budget> controlBudget(@Valid @RequestBody Budget budget){
-        return budgetService.requestBudget(budget);
+    @PostMapping("/answer")
+    public ResponseEntity<HttpStatus> responseBudget(@Valid @RequestBody BudgetResponse budgetResponse,Authentication authentication){
+        if (budgetResponse.getBudgetId() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (authentication == null || !authentication.isAuthenticated() || !minorJobService.getServiceProviderByToken(authentication).getEmail().equals(budgetService.getRepository().findById(budgetResponse.getBudgetId()).get().getMinorJob().getServiceProvider().getEmail()))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        return budgetService.answerBudget(budgetResponse);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteBudget(@PathVariable Long id){

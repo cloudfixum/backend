@@ -2,10 +2,7 @@ package com.um.cloudfixum.cloudfixum.service;
 
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.GenericServiceImpl;
-import com.um.cloudfixum.cloudfixum.model.Budget;
-import com.um.cloudfixum.cloudfixum.model.BudgetRequest;
-import com.um.cloudfixum.cloudfixum.model.BudgetStatus;
-import com.um.cloudfixum.cloudfixum.model.MinorJob;
+import com.um.cloudfixum.cloudfixum.model.*;
 import com.um.cloudfixum.cloudfixum.repository.BudgetRepository;
 import com.um.cloudfixum.cloudfixum.repository.MinorJobRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -76,5 +73,21 @@ public class BudgetService extends GenericServiceImpl<Budget> {
             emailService.sendEmail(email_content, minorJobRepository.findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), Constant.BUDGET_REQUEST);
             return create(budget);
         }
+    }
+
+    public ResponseEntity <HttpStatus> answerBudget (BudgetResponse budgetResponse) {
+        if (budgetResponse.getPrice() == null || budgetResponse.getBudgetId() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Optional<Budget> budget = getRepository().findById(budgetResponse.getBudgetId());
+
+        if (!budget.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (!budget.get().getBudgetStatus().equals(BudgetStatus.BUDGET_ON_HOLD)) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        budget.get().setBudgetStatus(BudgetStatus.RESPONSED_BUDGET);
+        budget.get().setBudgetPrice(budgetResponse.getPrice());
+        budget.get().setProviderResponse(budgetResponse.getProviderResponse());
+        super.update(budget.get());
+        emailService.sendEmail(Constant.RESPONSE_TO_THE_BUDGET+minorJobRepository.findById(budget.get().getMinorJob().getId()).get().getTitle(), budget.get().getUserEmail(), Constant.BUDGET_RESPONSE);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
