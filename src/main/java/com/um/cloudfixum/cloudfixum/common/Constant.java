@@ -79,4 +79,6 @@ public class Constant {
     public static final String BY_THE_USER = " by the user";
     public static final String HAS_A_BUDGET_REQUEST = "You have a budget request of your service called ";
 
+    //BudgetResponse
+    public static final String PROVIDER_RESPONSE_NEEDED = "You must provide a provider response";
 }

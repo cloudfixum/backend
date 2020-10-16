@@ -51,12 +51,6 @@ public class ProviderUserController {
 
         return providerUserService.getBudgets(authentication);
     }
-    @PostMapping("respbudget")
-    public ResponseEntity<Budget> responseBudget(Authentication authentication, @Valid @RequestBody Budget budget){
-        if (authentication == null || !authentication.isAuthenticated() || !minorJobService.getServiceProviderByToken(authentication).getEmail().equals(minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail()))
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        return providerUserService.responseBudget(budget);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id, Authentication authentication) {

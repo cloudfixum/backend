@@ -75,9 +75,13 @@ public class BudgetService extends GenericServiceImpl<Budget> {
     }
 
     public ResponseEntity <HttpStatus> answerBudget (BudgetResponse budgetResponse) {
+        if (budgetResponse.getPrice() == null || budgetResponse.getBudgetId() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         Optional<Budget> budget = getRepository().findById(budgetResponse.getBudgetId());
+
         if (!budget.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        if (budgetResponse.getPrice() == null || budgetResponse.getProviderResponse() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!budget.get().getBudgetStatus().equals(BudgetStatus.BUDGET_ON_HOLD)) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
         budget.get().setBudgetStatus(BudgetStatus.RESPONSED_BUDGET);
         budget.get().setBudgetPrice(budgetResponse.getPrice());
         budget.get().setProviderResponse(budgetResponse.getProviderResponse());
