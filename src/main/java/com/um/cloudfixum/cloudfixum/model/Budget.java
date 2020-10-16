@@ -3,7 +3,6 @@ package com.um.cloudfixum.cloudfixum.model;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
-import org.springframework.jdbc.support.incrementer.PostgresSequenceMaxValueIncrementer;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -52,5 +51,14 @@ public class Budget implements Serializable, Identificable {
 
     @ManyToOne
     private MinorJob minorJob;
+
+    public Budget(BudgetRequest budgetRequest){
+        this.userEmail = budgetRequest.getUserEmail();
+        this.description = budgetRequest.getDescription();
+        this.imageHash = budgetRequest.getImageHash();
+        this.location = budgetRequest.getLocation();
+
+
+    }
     
 }

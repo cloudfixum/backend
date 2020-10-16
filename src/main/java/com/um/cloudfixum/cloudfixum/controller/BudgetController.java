@@ -1,7 +1,7 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.model.Budget;
-import com.um.cloudfixum.cloudfixum.model.BudgetStatus;
+import com.um.cloudfixum.cloudfixum.model.BudgetRequest;
 import com.um.cloudfixum.cloudfixum.service.BudgetService;
 import com.um.cloudfixum.cloudfixum.service.EmailService;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
@@ -35,8 +35,9 @@ public class BudgetController {
     public  ResponseEntity<List<Budget>> getBudgetsByUserEmail(@RequestParam(value = "email", required = true) String email){return budgetService.getBudgetsbyCommonUserMail(email);}
 
     @PostMapping
-    public ResponseEntity<Budget> addBudget(@Valid @RequestBody Budget budget){
-        return  budgetService.create(budget);
+    public ResponseEntity<HttpStatus> addBudget(@Valid @RequestBody BudgetRequest budgetRequest){
+
+        return  budgetService.create(budgetRequest);
     }
 
     @PutMapping

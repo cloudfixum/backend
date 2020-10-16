@@ -3,6 +3,7 @@ package com.um.cloudfixum.cloudfixum.service;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.GenericServiceImpl;
 import com.um.cloudfixum.cloudfixum.model.Budget;
+import com.um.cloudfixum.cloudfixum.model.BudgetRequest;
 import com.um.cloudfixum.cloudfixum.model.BudgetStatus;
 import com.um.cloudfixum.cloudfixum.model.MinorJob;
 import com.um.cloudfixum.cloudfixum.repository.BudgetRepository;
@@ -33,15 +34,28 @@ public class BudgetService extends GenericServiceImpl<Budget> {
         return budgetRepository;
     }
 
-    @Override
-    public ResponseEntity<Budget> create(Budget budget) {
 
-        Optional<MinorJob> minorJob = minorJobRepository.findById(budget.getMinorJob().getId());
+    public ResponseEntity<HttpStatus> create(BudgetRequest budgetRequest) {
+        List<Budget> userBudgets = budgetRepository.findByuserEmail(budgetRequest.getUserEmail());
+        Optional<MinorJob> minorJob = minorJobRepository.findById(budgetRequest.getMinorJobId());
         if (!minorJob.isPresent()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        for (Budget budget: userBudgets) {
+            if (budget.getMinorJob().getId().equals(budgetRequest.getMinorJobId()) &&  budget.getBudgetStatus().equals(BudgetStatus.BUDGET_ON_HOLD)){
+               return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
 
+        }
+
+        Budget budget = new Budget(budgetRequest);
+        budget.setBudgetStatus(BudgetStatus.BUDGET_ON_HOLD);
         budget.setMinorJob(minorJob.get());
-        return super.create(budget);
+        super.create(budget);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
     }
+
+
+
 
     public ResponseEntity<List<Budget>> getBudgetsbyCommonUserMail(String email){
         List<Budget> user_budgets = budgetRepository.findByuserEmail(email);
