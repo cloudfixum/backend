@@ -53,6 +53,7 @@ public class Budget implements Serializable, Identificable {
     private MinorJob minorJob;
 
     public Budget(BudgetRequest budgetRequest){
+        this.budgetStatus = BudgetStatus.BUDGET_ON_HOLD;
         this.userEmail = budgetRequest.getUserEmail();
         this.description = budgetRequest.getDescription();
         this.imageHash = budgetRequest.getImageHash();

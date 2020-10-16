@@ -33,27 +33,21 @@ public class BudgetController {
     public ResponseEntity<Budget> getBudgetByID(@PathVariable Long id){ return budgetService.getById(id);}
 
     @GetMapping("/filter")
-    public  ResponseEntity<List<Budget>> getBudgetsByUserEmail(@RequestParam(value = "email", required = true) String email){return budgetService.getBudgetsbyCommonUserMail(email);}
+    public  ResponseEntity<List<Budget>> getBudgetsByUserEmail(@RequestParam(value = "email") String email){return budgetService.getBudgetsbyCommonUserMail(email);}
 
     @PostMapping
-    public ResponseEntity<HttpStatus> addBudget(@Valid @RequestBody BudgetRequest budgetRequest){
+    public ResponseEntity<?> addBudget(@Valid @RequestBody BudgetRequest budgetRequest){
 
-        return  budgetService.create(budgetRequest);
+        return budgetService.create(budgetRequest);
     }
 
-    @PutMapping
-    public ResponseEntity<Budget> updateBudget(@Valid @RequestBody Budget budget, Authentication authentication){
-        if (authentication == null || !authentication.isAuthenticated() || !minorJobService.getServiceProviderByToken(authentication).getEmail().equals(minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail()))
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-        return  budgetService.update(budget);
-    }
 
     @PostMapping("/answer")
-    public ResponseEntity<HttpStatus> responseBudget(@Valid @RequestBody BudgetResponse budgetResponse,Authentication authentication){
+    public ResponseEntity<?> responseBudget(@Valid @RequestBody BudgetResponse budgetResponse,Authentication authentication){
         if (budgetResponse.getBudgetId() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (authentication == null || !authentication.isAuthenticated() || !minorJobService.getServiceProviderByToken(authentication).getEmail().equals(budgetService.getRepository().findById(budgetResponse.getBudgetId()).get().getMinorJob().getServiceProvider().getEmail()))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
         return budgetService.answerBudget(budgetResponse);
     }
 
