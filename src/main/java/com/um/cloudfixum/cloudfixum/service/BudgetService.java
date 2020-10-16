@@ -37,8 +37,9 @@ public class BudgetService extends GenericServiceImpl<Budget> {
 
     public ResponseEntity<HttpStatus> create(BudgetRequest budgetRequest) {
         List<Budget> userBudgets = budgetRepository.findByuserEmail(budgetRequest.getUserEmail());
+        if(budgetRequest.getMinorJobId() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Optional<MinorJob> minorJob = minorJobRepository.findById(budgetRequest.getMinorJobId());
-        if (!minorJob.isPresent()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!minorJob.isPresent()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         for (Budget budget: userBudgets) {
             if (budget.getMinorJob().getId().equals(budgetRequest.getMinorJobId()) &&  budget.getBudgetStatus().equals(BudgetStatus.BUDGET_ON_HOLD)){
                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
