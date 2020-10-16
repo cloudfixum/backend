@@ -45,11 +45,12 @@ public class BudgetService extends GenericServiceImpl<Budget> {
             }
 
         }
-
         Budget budget = new Budget(budgetRequest);
         budget.setBudgetStatus(BudgetStatus.BUDGET_ON_HOLD);
         budget.setMinorJob(minorJob.get());
         super.create(budget);
+
+        emailService.sendEmail( Constant.HAS_A_BUDGET_REQUEST+minorJobRepository.findById(budget.getMinorJob().getId()).get().getTitle(), minorJobRepository.findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail(), Constant.BUDGET_REQUEST);
         return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
