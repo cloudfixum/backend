@@ -1,6 +1,7 @@
 package com.um.cloudfixum.cloudfixum.model;
 
 import com.um.cloudfixum.cloudfixum.common.Constant;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 
 public class BudgetResponse implements Serializable {
 
