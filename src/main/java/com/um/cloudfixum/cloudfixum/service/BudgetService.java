@@ -46,6 +46,7 @@ public class BudgetService extends GenericServiceImpl<Budget> {
         Budget budget = new Budget(budgetRequest);
         budget.setMinorJob(minorJob.get());
         emailService.sendEmail(Constant.HAS_A_BUDGET_REQUEST + minorJob.get().getTitle(), minorJob.get().getServiceProvider().getEmail(), Constant.BUDGET_REQUEST);
+        emailService.sendEmail(Constant.BUDGET_REQUEST_SUBMITTED, budget.getUserEmail(), Constant.BUDGET_REQUEST);
 
         return super.create(budget);
 

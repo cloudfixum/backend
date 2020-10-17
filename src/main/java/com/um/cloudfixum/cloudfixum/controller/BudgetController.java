@@ -3,7 +3,6 @@ package com.um.cloudfixum.cloudfixum.controller;
 import com.um.cloudfixum.cloudfixum.model.Budget;
 import com.um.cloudfixum.cloudfixum.model.BudgetRequest;
 import com.um.cloudfixum.cloudfixum.model.BudgetResponse;
-import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.service.BudgetService;
 import com.um.cloudfixum.cloudfixum.service.EmailService;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
@@ -24,7 +23,7 @@ public class BudgetController {
     private final BudgetService budgetService;
     private final MinorJobService minorJobService;
 
-    public BudgetController(BudgetService budgetService, EmailService emailService, MinorJobService minorJobService) {
+    public BudgetController(BudgetService budgetService, MinorJobService minorJobService) {
         this.budgetService = budgetService;
         this.minorJobService = minorJobService;
     }

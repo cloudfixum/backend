@@ -56,7 +56,6 @@ public class Constant {
     public static final String LOCATION_CHARACTERS_LONG = "Location can't exceed 50 characters long";
 
 
-
     //Enum Category
     public static final String SUPERCATEGORY_HOME = "Home";
     public static final String SUPERCATEGORY_HEALTH = "Health";
@@ -73,10 +72,8 @@ public class Constant {
     public static final String BUDGET_RESPONSE = "Budget Response";
 
     //BudgetService
-    public static final String CALLED_SERVICE = "Your budget of your service called ";
+    public static final String BUDGET_REQUEST_SUBMITTED = "Your budget request has been submitted! We'll let you know when you have an answer";
     public static final String BUDGET_REQUEST = "Budget Request";
-    public static final String HAS_BEEN = " has been ";
-    public static final String BY_THE_USER = " by the user";
     public static final String HAS_A_BUDGET_REQUEST = "You have a budget request of your service called ";
 
     //BudgetResponse
