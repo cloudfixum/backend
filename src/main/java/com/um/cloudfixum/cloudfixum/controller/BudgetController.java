@@ -3,6 +3,7 @@ package com.um.cloudfixum.cloudfixum.controller;
 import com.um.cloudfixum.cloudfixum.model.Budget;
 import com.um.cloudfixum.cloudfixum.model.BudgetRequest;
 import com.um.cloudfixum.cloudfixum.model.BudgetResponse;
+import com.um.cloudfixum.cloudfixum.model.ProviderUser;
 import com.um.cloudfixum.cloudfixum.service.BudgetService;
 import com.um.cloudfixum.cloudfixum.service.EmailService;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
@@ -21,12 +22,10 @@ import java.util.Optional;
 public class BudgetController {
 
     private final BudgetService budgetService;
-    private final EmailService emailService;
     private final MinorJobService minorJobService;
 
     public BudgetController(BudgetService budgetService, EmailService emailService, MinorJobService minorJobService) {
         this.budgetService = budgetService;
-        this.emailService = emailService;
         this.minorJobService = minorJobService;
     }
     @GetMapping("/{id}")
@@ -45,7 +44,10 @@ public class BudgetController {
     @PostMapping("/answer")
     public ResponseEntity<?> responseBudget(@Valid @RequestBody BudgetResponse budgetResponse,Authentication authentication){
         if (budgetResponse.getBudgetId() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (authentication == null || !authentication.isAuthenticated() || !minorJobService.getServiceProviderByToken(authentication).getEmail().equals(budgetService.getRepository().findById(budgetResponse.getBudgetId()).get().getMinorJob().getServiceProvider().getEmail()))
+        Optional<Budget> budget = budgetService.getRepository().findById(budgetResponse.getBudgetId());
+        if (!budget.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        if (authentication == null || !authentication.isAuthenticated() || !minorJobService.getServiceProviderByToken(authentication).getEmail().equals(budget.get().getMinorJob().getServiceProvider().getEmail()))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         return budgetService.answerBudget(budgetResponse);
