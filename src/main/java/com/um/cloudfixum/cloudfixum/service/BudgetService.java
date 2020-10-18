@@ -31,6 +31,10 @@ public class BudgetService extends GenericServiceImpl<Budget> {
         return budgetRepository;
     }
 
+    public ResponseEntity<List<Budget>> getBudgetsbyCommonUserMail(String email) {
+        List<Budget> user_budgets = budgetRepository.findByuserEmail(email);
+        return user_budgets.size() == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(user_budgets, HttpStatus.OK);
+    }
 
     public ResponseEntity<?> create(BudgetRequest budgetRequest) {
         List<Budget> userBudgets = budgetRepository.findByuserEmail(budgetRequest.getUserEmail());
@@ -53,12 +57,6 @@ public class BudgetService extends GenericServiceImpl<Budget> {
     }
 
 
-    public ResponseEntity<List<Budget>> getBudgetsbyCommonUserMail(String email) {
-        List<Budget> user_budgets = budgetRepository.findByuserEmail(email);
-        return user_budgets.size() == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(user_budgets, HttpStatus.OK);
-    }
-
-
     public ResponseEntity<?> answerBudget(BudgetResponse budgetResponse) {
         if (budgetResponse.getPrice() == null || budgetResponse.getBudgetId() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -74,6 +72,24 @@ public class BudgetService extends GenericServiceImpl<Budget> {
         budget.get().setProviderResponse(budgetResponse.getProviderResponse());
 
         emailService.sendEmail(Constant.RESPONSE_TO_THE_BUDGET + budget.get().getMinorJob().getTitle(), budget.get().getUserEmail(), Constant.BUDGET_RESPONSE);
+
+        return super.update(budget.get());
+    }
+
+    public ResponseEntity<?> confirmBudget(Long budgetId, boolean budgetConfirmation){
+        Optional<Budget> budget = getRepository().findById(budgetId);
+        if (!budget.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (!budget.get().getBudgetStatus().equals(BudgetStatus.RESPONSED_BUDGET))
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+
+        if (budgetConfirmation) {
+            budget.get().setBudgetStatus(BudgetStatus.BUDGET_ACCEPTED);
+            emailService.sendEmail(Constant.BUDGET_CONFIRM_SUBMITTED,budget.get().getUserEmail(), Constant.BUDGET_REQUEST);
+        } else {
+            budget.get().setBudgetStatus(BudgetStatus.BUDGET_REJECTED);
+        }
+
+        emailService.sendEmail(Constant.CALLED_SERVICE+budget.get().getMinorJob().getTitle()+Constant.HAS_BEEN+budget.get().getBudgetStatus().getStatus()+Constant.BY_THE_USER, budget.get().getMinorJob().getServiceProvider().getEmail(), Constant.BUDGET_REQUEST);
 
         return super.update(budget.get());
     }

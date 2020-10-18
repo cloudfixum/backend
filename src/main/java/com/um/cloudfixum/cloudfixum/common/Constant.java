@@ -73,8 +73,12 @@ public class Constant {
 
     //BudgetService
     public static final String BUDGET_REQUEST_SUBMITTED = "Your budget request has been submitted! We'll let you know when you have an answer";
+    public static final String BUDGET_CONFIRM_SUBMITTED = "Your budget confirmation has been submitted! Please contact the service owner";
     public static final String BUDGET_REQUEST = "Budget Request";
     public static final String HAS_A_BUDGET_REQUEST = "You have a budget request of your service called ";
+    public static final String HAS_BEEN = " has been ";
+    public static final String BY_THE_USER = " by the user";
+    public static final String CALLED_SERVICE = "Your budget of your service called ";
 
     //BudgetResponse
     public static final String PROVIDER_RESPONSE_NEEDED = "You must provide a provider response";

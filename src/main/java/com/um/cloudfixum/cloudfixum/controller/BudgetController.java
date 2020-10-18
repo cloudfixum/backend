@@ -53,6 +53,12 @@ public class BudgetController {
     }
 
 
+    @GetMapping("/{id}/confirm")
+    public ResponseEntity<?> confirmBudget(@RequestParam(value = "accepted",required = true) boolean budgetAccepted, @PathVariable Long id){
+        return budgetService.confirmBudget(id,budgetAccepted);
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteBudget(@PathVariable Long id){
         Optional<Budget> budget = budgetService.getRepository().findById(id);
