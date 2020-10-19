@@ -34,14 +34,14 @@ public class BudgetController {
     public  ResponseEntity<List<Budget>> getBudgetsByUserEmail(@RequestParam(value = "email") String email){return budgetService.getBudgetsbyCommonUserMail(email);}
 
     @PostMapping
-    public ResponseEntity<?> addBudget(@Valid @RequestBody BudgetRequest budgetRequest){
+    public ResponseEntity<?> requestBudget(@Valid @RequestBody BudgetRequest budgetRequest){
 
         return budgetService.create(budgetRequest);
     }
 
 
     @PostMapping("/answer")
-    public ResponseEntity<?> responseBudget(@Valid @RequestBody BudgetResponse budgetResponse,Authentication authentication){
+    public ResponseEntity<?> answerBudget(@Valid @RequestBody BudgetResponse budgetResponse,Authentication authentication){
         if (budgetResponse.getBudgetId() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Optional<Budget> budget = budgetService.getRepository().findById(budgetResponse.getBudgetId());
         if (!budget.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);

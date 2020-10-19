@@ -85,11 +85,10 @@ public class BudgetService extends GenericServiceImpl<Budget> {
         if (budgetConfirmation) {
             budget.get().setBudgetStatus(BudgetStatus.BUDGET_ACCEPTED);
             emailService.sendEmail(Constant.BUDGET_CONFIRM_SUBMITTED,budget.get().getUserEmail(), Constant.BUDGET_REQUEST);
+            emailService.sendEmail(Constant.CALLED_SERVICE+budget.get().getMinorJob().getTitle()+Constant.HAS_BEEN+budget.get().getBudgetStatus().getStatus()+Constant.BY_THE_USER, budget.get().getMinorJob().getServiceProvider().getEmail(), Constant.BUDGET_REQUEST);
         } else {
             budget.get().setBudgetStatus(BudgetStatus.BUDGET_REJECTED);
         }
-
-        emailService.sendEmail(Constant.CALLED_SERVICE+budget.get().getMinorJob().getTitle()+Constant.HAS_BEEN+budget.get().getBudgetStatus().getStatus()+Constant.BY_THE_USER, budget.get().getMinorJob().getServiceProvider().getEmail(), Constant.BUDGET_REQUEST);
 
         return super.update(budget.get());
     }
