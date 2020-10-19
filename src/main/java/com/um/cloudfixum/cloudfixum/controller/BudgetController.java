@@ -34,14 +34,14 @@ public class BudgetController {
     public  ResponseEntity<List<Budget>> getBudgetsByUserEmail(@RequestParam(value = "email") String email){return budgetService.getBudgetsbyCommonUserMail(email);}
 
     @PostMapping
-    public ResponseEntity<?> addBudget(@Valid @RequestBody BudgetRequest budgetRequest){
+    public ResponseEntity<?> requestBudget(@Valid @RequestBody BudgetRequest budgetRequest){
 
         return budgetService.create(budgetRequest);
     }
 
 
     @PostMapping("/answer")
-    public ResponseEntity<?> responseBudget(@Valid @RequestBody BudgetResponse budgetResponse,Authentication authentication){
+    public ResponseEntity<?> answerBudget(@Valid @RequestBody BudgetResponse budgetResponse,Authentication authentication){
         if (budgetResponse.getBudgetId() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Optional<Budget> budget = budgetService.getRepository().findById(budgetResponse.getBudgetId());
         if (!budget.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -50,6 +50,12 @@ public class BudgetController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         return budgetService.answerBudget(budgetResponse);
+    }
+
+
+    @GetMapping("/{id}/confirm")
+    public ResponseEntity<?> confirmBudget(@RequestParam(value = "accepted",required = true) boolean budgetAccepted, @PathVariable Long id){
+        return budgetService.confirmBudget(id,budgetAccepted);
     }
 
 
