@@ -3,7 +3,6 @@ package com.um.cloudfixum.cloudfixum.model;
 import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.Identificable;
 import lombok.*;
-import org.springframework.jdbc.support.incrementer.PostgresSequenceMaxValueIncrementer;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -34,16 +33,16 @@ public class Budget implements Serializable, Identificable {
     private String userEmail;
 
     @Size(min = 10, max = 256, message = Constant.RESPONSE_CHARACTERS_LONG)
-    private String provider_response;
+    private String providerResponse;
 
     @NotEmpty(message = Constant.LOCATION_NEEDED)
     @Size(min = 4, max = 50, message = Constant.LOCATION_CHARACTERS_LONG)
     private String location;
 
-    private Long budget_price;
+    private Long budgetPrice;
 
     @Column(columnDefinition = "TEXT")
-    private String image_url_encoded;//BASE64
+    private String imageHash;//BASE64
 
     @NotNull(message = Constant.MESSAGE_BUDGETSTATUS)
     @Enumerated(EnumType.STRING)
@@ -52,5 +51,15 @@ public class Budget implements Serializable, Identificable {
 
     @ManyToOne
     private MinorJob minorJob;
+
+    public Budget(BudgetRequest budgetRequest){
+        this.budgetStatus = BudgetStatus.BUDGET_ON_HOLD;
+        this.userEmail = budgetRequest.getUserEmail();
+        this.description = budgetRequest.getDescription();
+        this.imageHash = budgetRequest.getImageHash();
+        this.location = budgetRequest.getLocation();
+
+
+    }
     
 }

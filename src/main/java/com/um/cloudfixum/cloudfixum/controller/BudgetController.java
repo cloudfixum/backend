@@ -1,7 +1,8 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.model.Budget;
-import com.um.cloudfixum.cloudfixum.model.BudgetStatus;
+import com.um.cloudfixum.cloudfixum.model.BudgetRequest;
+import com.um.cloudfixum.cloudfixum.model.BudgetResponse;
 import com.um.cloudfixum.cloudfixum.service.BudgetService;
 import com.um.cloudfixum.cloudfixum.service.EmailService;
 import com.um.cloudfixum.cloudfixum.service.MinorJobService;
@@ -20,37 +21,43 @@ import java.util.Optional;
 public class BudgetController {
 
     private final BudgetService budgetService;
-    private final EmailService emailService;
     private final MinorJobService minorJobService;
 
-    public BudgetController(BudgetService budgetService, EmailService emailService, MinorJobService minorJobService) {
+    public BudgetController(BudgetService budgetService, MinorJobService minorJobService) {
         this.budgetService = budgetService;
-        this.emailService = emailService;
         this.minorJobService = minorJobService;
     }
     @GetMapping("/{id}")
     public ResponseEntity<Budget> getBudgetByID(@PathVariable Long id){ return budgetService.getById(id);}
 
     @GetMapping("/filter")
-    public  ResponseEntity<List<Budget>> getBudgetsByUserEmail(@RequestParam(value = "email", required = true) String email){return budgetService.getBudgetsbyCommonUserMail(email);}
+    public  ResponseEntity<List<Budget>> getBudgetsByUserEmail(@RequestParam(value = "email") String email){return budgetService.getBudgetsbyCommonUserMail(email);}
 
     @PostMapping
-    public ResponseEntity<Budget> addBudget(@Valid @RequestBody Budget budget){
-        return  budgetService.create(budget);
+    public ResponseEntity<?> requestBudget(@Valid @RequestBody BudgetRequest budgetRequest){
+
+        return budgetService.create(budgetRequest);
     }
 
-    @PutMapping
-    public ResponseEntity<Budget> updateBudget(@Valid @RequestBody Budget budget, Authentication authentication){
-        if (authentication == null || !authentication.isAuthenticated() || !minorJobService.getServiceProviderByToken(authentication).getEmail().equals(minorJobService.getRepository().findById(budget.getMinorJob().getId()).get().getServiceProvider().getEmail()))
+
+    @PostMapping("/answer")
+    public ResponseEntity<?> answerBudget(@Valid @RequestBody BudgetResponse budgetResponse,Authentication authentication){
+        if (budgetResponse.getBudgetId() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Optional<Budget> budget = budgetService.getRepository().findById(budgetResponse.getBudgetId());
+        if (!budget.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        if (authentication == null || !authentication.isAuthenticated() || !minorJobService.getServiceProviderByToken(authentication).getEmail().equals(budget.get().getMinorJob().getServiceProvider().getEmail()))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
-        return  budgetService.update(budget);
+        return budgetService.answerBudget(budgetResponse);
     }
 
-    @PostMapping("/manage")
-    public ResponseEntity<Budget> controlBudget(@Valid @RequestBody Budget budget){
-        return budgetService.requestBudget(budget);
+
+    @GetMapping("/{id}/confirm")
+    public ResponseEntity<?> confirmBudget(@RequestParam(value = "accepted",required = true) boolean budgetAccepted, @PathVariable Long id){
+        return budgetService.confirmBudget(id,budgetAccepted);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteBudget(@PathVariable Long id){
