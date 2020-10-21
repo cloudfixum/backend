@@ -1,6 +1,7 @@
 package com.um.cloudfixum.cloudfixum.controller;
 
 import com.um.cloudfixum.cloudfixum.model.Budget;
+import com.um.cloudfixum.cloudfixum.model.BudgetQualification;
 import com.um.cloudfixum.cloudfixum.model.BudgetRequest;
 import com.um.cloudfixum.cloudfixum.model.BudgetResponse;
 import com.um.cloudfixum.cloudfixum.service.BudgetService;
@@ -68,6 +69,9 @@ public class BudgetController {
         return budgetService.delete(id);
     }
 
-
+    @PostMapping("/qualification")
+    public ResponseEntity <?> setQualification (@RequestBody BudgetQualification budgetQualification) {
+        return budgetService.verifyBudgetStatus(budgetQualification.getBudgetId(),budgetQualification);
+    }
 
 }
