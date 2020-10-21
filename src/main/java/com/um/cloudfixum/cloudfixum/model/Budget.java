@@ -52,6 +52,8 @@ public class Budget implements Serializable, Identificable {
     @ManyToOne
     private MinorJob minorJob;
 
+    private Integer qualification;
+
     public Budget(BudgetRequest budgetRequest){
         this.budgetStatus = BudgetStatus.BUDGET_ON_HOLD;
         this.userEmail = budgetRequest.getUserEmail();
