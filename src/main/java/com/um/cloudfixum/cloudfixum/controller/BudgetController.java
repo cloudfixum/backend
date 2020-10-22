@@ -70,7 +70,7 @@ public class BudgetController {
     }
 
     @PostMapping("/qualification")
-    public ResponseEntity <?> setQualification (@RequestBody BudgetQualification budgetQualification) {
+    public ResponseEntity <?> setQualification (@Valid @RequestBody BudgetQualification budgetQualification) {
         return budgetService.verifyBudgetStatus(budgetQualification.getBudgetId(),budgetQualification);
     }
 
