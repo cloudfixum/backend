@@ -81,4 +81,33 @@ public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
     public JpaRepository<ProviderUser, Long> getRepository() {
         return providerUserRepository;
     }
+
+    public ResponseEntity<Float> getAverage(Authentication auth) {
+        //ProviderUser user = providerUserRepository.findByEmail(auth.getName());
+        List<Budget> budgets = getBudgetsByUser(auth);
+        Float count = declaresCount();
+
+        for (Budget budget : budgets){
+            count += budget.getQualification();
+        }
+
+        Float average = count/budgets.size();
+
+        return budgets.size() == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(average,HttpStatus.OK);
+    }
+
+    public Float declaresCount(){
+        return 0.0f;
+    }
+
+    public List<Budget> getBudgetsByUser(Authentication auth) {
+        ProviderUser user = providerUserRepository.findByEmail(auth.getName());
+        List<Budget> budgets = new ArrayList<>();
+
+        for (MinorJob job : user.getServiceList()) {
+            budgets.addAll(job.getBudgetList());
+        }
+
+       return budgets;
+    }
 }

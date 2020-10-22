@@ -92,4 +92,13 @@ public class BudgetService extends GenericServiceImpl<Budget> {
 
         return super.update(budget.get());
     }
+
+    public ResponseEntity <?> verifyBudgetStatus(Long id, BudgetQualification budgetQualification) {
+        Optional<Budget> budget = getRepository().findById(id);
+        if (!budget.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (!budget.get().getBudgetStatus().equals(BudgetStatus.BUDGET_ACCEPTED))
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        budget.get().setQualification(budgetQualification.getBudgetQualification());
+        return super.update(budget.get());
+    }
 }

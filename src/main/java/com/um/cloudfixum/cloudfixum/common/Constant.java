@@ -82,4 +82,7 @@ public class Constant {
 
     //BudgetResponse
     public static final String PROVIDER_RESPONSE_NEEDED = "You must provide a provider response";
+
+    //BudgetQualification
+    public static final String BUDGET_QUALIFICATION = "The qualification is between 1-5 ";
 }
