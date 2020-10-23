@@ -16,7 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,33 +74,34 @@ public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
         return providerUserRepository;
     }
 
-    public ResponseEntity <Float> getAverage(Long id) {
-        ResponseEntity<List<Budget>> budgets = getQualifyBudgetByUser(id);
+    public ResponseEntity <Map<String,Float>> getAverage(Long id) {
+        if (!providerUserRepository.findById(id).isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<Budget> budgetsUser = getQualifyBudgetByUser(id);
         Float count = declaresCount();
-        if (budgets.getBody().size() == 0){
+        if (budgetsUser.size() == 0){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Budget budget : budgets.getBody()){
+        for (Budget budget : budgetsUser){
             count += budget.getQualification();
         }
 
-        Float average = count/budgets.getBody().size();
+        Float average = count/budgetsUser.size();
+        Map<String, Float> userAvg = new HashMap<>();
+        userAvg.put("average",average);
 
-        return average == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(average,HttpStatus.OK);
+        return average == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(userAvg,HttpStatus.OK);
     }
 
-    public Float declaresCount(){
+    private Float declaresCount(){
         return 0.0f;
     }
 
-    public ResponseEntity <List<Budget>> getQualifyBudgetByUser(Long id) {
-        if (!providerUserRepository.findById(id).isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        List<Budget> userBudgets = budgetRepository.findAllByMinorJobServiceProviderId(id)
+    private List<Budget> getQualifyBudgetByUser(Long id) {
+
+        return budgetRepository.findAllByMinorJobServiceProviderId(id)
                 .stream()
                 .filter(b -> b.getBudgetStatus().equals(BudgetStatus.BUDGET_ACCEPTED))
                 .filter(b -> b.getQualification() != null)
                 .collect(Collectors.toList());
-
-       return new ResponseEntity<>(userBudgets,HttpStatus.OK);
     }
 }
