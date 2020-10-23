@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
@@ -82,32 +83,33 @@ public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
         return providerUserRepository;
     }
 
-    public ResponseEntity<Float> getAverage(Authentication auth) {
-        //ProviderUser user = providerUserRepository.findByEmail(auth.getName());
-        List<Budget> budgets = getBudgetsByUser(auth);
+    public ResponseEntity <Float> getAverage(Long id) {
+        ResponseEntity<List<Budget>> budgets = getQualifyBudgetByUser(id);
         Float count = declaresCount();
-
-        for (Budget budget : budgets){
+        if (budgets.getBody().size() == 0){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Budget budget : budgets.getBody()){
             count += budget.getQualification();
         }
 
-        Float average = count/budgets.size();
+        Float average = count/budgets.getBody().size();
 
-        return budgets.size() == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(average,HttpStatus.OK);
+        return average == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(average,HttpStatus.OK);
     }
 
     public Float declaresCount(){
         return 0.0f;
     }
 
-    public List<Budget> getBudgetsByUser(Authentication auth) {
-        ProviderUser user = providerUserRepository.findByEmail(auth.getName());
-        List<Budget> budgets = new ArrayList<>();
+    public ResponseEntity <List<Budget>> getQualifyBudgetByUser(Long id) {
+        if (!providerUserRepository.findById(id).isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<Budget> userBudgets = budgetRepository.findAllByMinorJobServiceProviderId(id)
+                .stream()
+                .filter(b -> b.getBudgetStatus().equals(BudgetStatus.BUDGET_ACCEPTED))
+                .filter(b -> b.getQualification() != null)
+                .collect(Collectors.toList());
 
-        for (MinorJob job : user.getServiceList()) {
-            budgets.addAll(job.getBudgetList());
-        }
-
-       return budgets;
+       return new ResponseEntity<>(userBudgets,HttpStatus.OK);
     }
 }

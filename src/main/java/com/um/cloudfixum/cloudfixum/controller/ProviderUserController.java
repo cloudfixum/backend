@@ -71,12 +71,9 @@ public class ProviderUserController {
 
     }
 
-    @GetMapping("/average")
-    public ResponseEntity<Float> getAverageBudgetsByServiceProvider(Authentication authentication) {
-        if (authentication == null) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-
-        return providerUserService.getAverage(authentication);
+    @GetMapping("/{id}/average")
+    public ResponseEntity<Float> getAverageBudgetsByServiceProvider(@PathVariable Long id) {
+        return providerUserService.getAverage(id);
     }
 
 }
