@@ -45,13 +45,10 @@ public class EmailService implements EmailPort {
         try {
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            System.out.println(email);
             helper.setTo(email);
             helper.setText(emailHtml.generateMailHtml(content), true);
             helper.setSubject(subject);
             List<String> attachment = new LinkedList<>();
-            //attachment.add("/home/santiagoriera/Escritorio/water-pipe-sewage-plumbing-plumber-pollution-drain-old-pipeline.jpg");
-            //attachment.add("/home/santiagoriera/Escritorio/example1.jpg");
             if (!attachment.isEmpty()) {
                 addMailAttachments(attachment, helper);
             }

@@ -1,6 +1,5 @@
 package com.um.cloudfixum.cloudfixum.service;
 
-import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.GenericServiceImpl;
 import com.um.cloudfixum.cloudfixum.model.Budget;
 import com.um.cloudfixum.cloudfixum.model.BudgetStatus;
@@ -17,7 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
@@ -67,47 +69,39 @@ public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Budget> responseBudget(Budget budget){
-        budget.setBudgetStatus(BudgetStatus.RESPONSED_BUDGET);
-        if (budget.getProviderResponse() == null || budget.getBudgetPrice() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        emailService.sendEmail(Constant.RESPONSE_TO_THE_BUDGET+minorJobRepository.findById(budget.getMinorJob().getId()).get().getTitle(), budget.getUserEmail(), Constant.BUDGET_RESPONSE);
-        if (!budgetRepository.findById(budget.getId()).isPresent())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        budgetRepository.save(budget);
-        return new ResponseEntity<>(budget,HttpStatus.OK);
-    }
-
     @Override
     public JpaRepository<ProviderUser, Long> getRepository() {
         return providerUserRepository;
     }
 
-    public ResponseEntity<Float> getAverage(Authentication auth) {
-        //ProviderUser user = providerUserRepository.findByEmail(auth.getName());
-        List<Budget> budgets = getBudgetsByUser(auth);
+    public ResponseEntity <Map<String,Float>> getAverage(Long id) {
+        if (!providerUserRepository.findById(id).isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<Budget> budgetsUser = getQualifyBudgetByUser(id);
         Float count = declaresCount();
-
-        for (Budget budget : budgets){
+        if (budgetsUser.size() == 0){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Budget budget : budgetsUser){
             count += budget.getQualification();
         }
 
-        Float average = count/budgets.size();
+        Float average = count/budgetsUser.size();
+        Map<String, Float> userAvg = new HashMap<>();
+        userAvg.put("average",average);
 
-        return budgets.size() == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(average,HttpStatus.OK);
+        return average == 0 ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(userAvg,HttpStatus.OK);
     }
 
-    public Float declaresCount(){
+    private Float declaresCount(){
         return 0.0f;
     }
 
-    public List<Budget> getBudgetsByUser(Authentication auth) {
-        ProviderUser user = providerUserRepository.findByEmail(auth.getName());
-        List<Budget> budgets = new ArrayList<>();
+    private List<Budget> getQualifyBudgetByUser(Long id) {
 
-        for (MinorJob job : user.getServiceList()) {
-            budgets.addAll(job.getBudgetList());
-        }
-
-       return budgets;
+        return budgetRepository.findAllByMinorJobServiceProviderId(id)
+                .stream()
+                .filter(b -> b.getBudgetStatus().equals(BudgetStatus.BUDGET_ACCEPTED))
+                .filter(b -> b.getQualification() != null)
+                .collect(Collectors.toList());
     }
 }

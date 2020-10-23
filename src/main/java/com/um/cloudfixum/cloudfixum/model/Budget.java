@@ -48,11 +48,11 @@ public class Budget implements Serializable, Identificable {
     @Enumerated(EnumType.STRING)
     private BudgetStatus budgetStatus;
 
+    private Integer qualification;
 
     @ManyToOne
     private MinorJob minorJob;
 
-    private Integer qualification;
 
     public Budget(BudgetRequest budgetRequest){
         this.budgetStatus = BudgetStatus.BUDGET_ON_HOLD;
