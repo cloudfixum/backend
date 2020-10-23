@@ -1,6 +1,5 @@
 package com.um.cloudfixum.cloudfixum.service;
 
-import com.um.cloudfixum.cloudfixum.common.Constant;
 import com.um.cloudfixum.cloudfixum.common.GenericServiceImpl;
 import com.um.cloudfixum.cloudfixum.model.Budget;
 import com.um.cloudfixum.cloudfixum.model.BudgetStatus;
@@ -66,16 +65,6 @@ public class ProviderUserService extends GenericServiceImpl<ProviderUser> {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         getRepository().save(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
-    }
-
-    public ResponseEntity<Budget> responseBudget(Budget budget){
-        budget.setBudgetStatus(BudgetStatus.RESPONSED_BUDGET);
-        if (budget.getProviderResponse() == null || budget.getBudgetPrice() == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        emailService.sendEmail(Constant.RESPONSE_TO_THE_BUDGET+minorJobRepository.findById(budget.getMinorJob().getId()).get().getTitle(), budget.getUserEmail(), Constant.BUDGET_RESPONSE);
-        if (!budgetRepository.findById(budget.getId()).isPresent())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        budgetRepository.save(budget);
-        return new ResponseEntity<>(budget,HttpStatus.OK);
     }
 
     @Override
