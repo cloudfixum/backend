@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -69,6 +70,11 @@ public class ProviderUserController {
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
+    }
+
+    @GetMapping("/{id}/average")
+    public ResponseEntity<Map<String,Float>> getAverageBudgetsByServiceProvider(@PathVariable Long id) {
+        return providerUserService.getAverage(id);
     }
 
 }
