@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -89,5 +90,10 @@ public class MinorJobController {
         }
 
         return minorJobService.isOwner(authentication, minorJob.get()) ? minorJobService.delete(id) : new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("/{id}/average")
+    public ResponseEntity<Map<String,Float>> getAverageBudgetsByMinorJob(@PathVariable Long id) {
+        return minorJobService.getMinorJobAverage(id);
     }
 }
